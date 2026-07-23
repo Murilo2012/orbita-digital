@@ -6,727 +6,905 @@
 <title>Órbita Digital — Agência Digital</title>
 <meta name="description" content="Sites, design, automação e vídeos para pequenos negócios no Brasil e EUA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --navy:#04051a;
-  --purple:#6d28d9;
-  --purple-light:#8b5cf6;
-  --gold:#f59e0b;
-  --white:#f0f4ff;
-  --muted:#7c8ab8;
-  --dim:#3a4a7a;
-  --font:'Space Grotesk',sans-serif;
-  --mono:'Space Mono',monospace;
-}
-html{scroll-behavior:auto}
+html{scroll-behavior:auto;cursor:none}
 body{
-  background:var(--navy);
-  color:var(--white);
-  font-family:var(--font);
+  background:#04051a;color:#f0f4ff;
+  font-family:'Space Grotesk',sans-serif;
   overflow-x:hidden;
 }
 
-/* ── SCROLL JOURNEY ── */
-#journey{
-  position:relative;
-  height:600vh; /* altura total do scroll */
+/* ── CURSOR PERSONALIZADO ── */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:#8b5cf6;border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+  mix-blend-mode:screen;
 }
-#journey-sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:hidden;
+#cursor-ring{
+  position:fixed;width:40px;height:40px;
+  border:1px solid rgba(139,92,246,.5);
+  border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .35s cubic-bezier(.22,1,.36,1),
+             height .35s cubic-bezier(.22,1,.36,1),
+             transform .08s linear,
+             border-color .2s;
 }
+body:hover #cursor{opacity:1}
+.cursor-hover #cursor{width:20px;height:20px;background:#f59e0b}
+.cursor-hover #cursor-ring{width:60px;height:60px;border-color:rgba(245,158,11,.4)}
 
-/* Cenas de vídeo/imagem */
-.scene{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  transition:opacity .15s;
-}
-.scene.active{opacity:1}
-.scene video,.scene .scene-bg{
-  width:100%;height:100%;
-  object-fit:cover;
-}
-.scene-bg{
-  background:var(--navy);
-  display:flex;align-items:center;justify-content:center;
-}
-
-/* Overlay escuro sobre cenas */
-.scene::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(
-    to bottom,
-    rgba(4,5,26,.2) 0%,
-    rgba(4,5,26,.5) 60%,
-    rgba(4,5,26,.85) 100%
-  );
-}
-
-/* Conteúdo sobreposto na cena */
-.scene-content{
-  position:absolute;
-  bottom:12%;left:8%;right:8%;
-  z-index:10;
-  transform:translateY(20px);
-  opacity:0;
-  transition:transform .6s cubic-bezier(.22,1,.36,1), opacity .6s;
-}
-.scene.active .scene-content{
-  transform:translateY(0);
-  opacity:1;
-}
-.scene-label{
-  font-family:var(--mono);
-  font-size:.72rem;letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--purple-light);
-  margin-bottom:.8rem;
-  display:block;
-}
-.scene-title{
-  font-size:clamp(2.2rem,5vw,4rem);
-  font-weight:700;letter-spacing:-.03em;
-  line-height:1.05;margin-bottom:1rem;
-  max-width:700px;
-}
-.scene-title em{font-style:normal;color:var(--gold)}
-.scene-sub{
-  color:rgba(240,244,255,.7);
-  font-size:1.05rem;max-width:500px;
-  line-height:1.65;margin-bottom:1.5rem;
-}
-.scene-cta{
-  display:inline-flex;align-items:center;gap:.5rem;
-  background:var(--purple);color:#fff;
-  padding:.7rem 1.6rem;border-radius:8px;
-  text-decoration:none;font-weight:600;font-size:.95rem;
-  transition:all .2s;
-}
-.scene-cta:hover{background:var(--purple-light);transform:translateY(-2px)}
-
-/* Barra de progresso */
-#progress-bar{
-  position:fixed;top:0;left:0;height:2px;
-  background:linear-gradient(90deg,var(--purple),var(--gold));
-  z-index:200;width:0%;transition:width .1s;
-}
-
-/* Indicador de scroll */
-#scroll-hint{
-  position:absolute;bottom:7%;left:50%;
-  transform:translateX(-50%);
-  z-index:20;
-  display:flex;flex-direction:column;
-  align-items:center;gap:.5rem;
-  opacity:.6;
-  animation:bounce 2s ease infinite;
-}
-@keyframes bounce{
-  0%,100%{transform:translateX(-50%) translateY(0)}
-  50%{transform:translateX(-50%) translateY(8px)}
-}
-#scroll-hint span{
-  font-size:.72rem;font-family:var(--mono);
-  letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);
-}
-#scroll-hint svg{color:var(--purple-light)}
-
-/* Partículas espaciais em SVG animado */
-.space-particles{
-  position:absolute;inset:0;
-  pointer-events:none;
-  overflow:hidden;
-}
-.particle{
-  position:absolute;
-  border-radius:50%;
-  background:#fff;
-  animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s);
-}
-@keyframes twinkle{
-  0%,100%{opacity:var(--min-o,.1);transform:scale(1)}
-  50%{opacity:var(--max-o,.8);transform:scale(1.5)}
+/* ── BARRA DE PROGRESSO ── */
+#progress{
+  position:fixed;top:0;left:0;height:2px;z-index:200;
+  background:linear-gradient(90deg,#6d28d9,#f59e0b,#8b5cf6);
+  width:0%;transition:width .05s linear;
 }
 
 /* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:1.1rem 2rem;
+  padding:1.2rem 2.5rem;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(4,5,26,.7);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(109,40,217,.2);
+  background:rgba(4,5,26,0);
+  transition:background .4s,backdrop-filter .4s,border-bottom .4s;
+}
+nav.scrolled{
+  background:rgba(4,5,26,.8);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(109,40,217,.15);
 }
 .nav-logo{
-  font-family:var(--mono);font-size:1rem;font-weight:700;
-  color:var(--white);text-decoration:none;
-  display:flex;align-items:center;gap:.6rem;
+  font-family:'Space Mono',monospace;font-size:.95rem;font-weight:700;
+  color:#f0f4ff;text-decoration:none;
+  display:flex;align-items:center;gap:.7rem;
+  letter-spacing:-.02em;
 }
-.nav-links{display:flex;gap:2rem;list-style:none}
+.logo-dot{
+  width:28px;height:28px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-dot svg{width:28px;height:28px}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
 .nav-links a{
-  color:var(--muted);text-decoration:none;
-  font-size:.875rem;font-weight:500;transition:color .2s;
+  color:rgba(240,244,255,.55);text-decoration:none;
+  font-size:.82rem;font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase;transition:color .2s;
 }
-.nav-links a:hover{color:var(--white)}
-.nav-btn{
-  background:var(--purple);color:#fff;
-  padding:.55rem 1.3rem;border-radius:8px;
-  text-decoration:none;font-size:.875rem;font-weight:600;
-  transition:all .2s;
+.nav-links a:hover{color:#f0f4ff}
+.nav-cta{
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;padding:.6rem 1.5rem;border-radius:50px;
+  text-decoration:none;font-size:.82rem;font-weight:600;
+  letter-spacing:.04em;transition:all .25s;
+  box-shadow:0 0 20px rgba(109,40,217,.3);
+  cursor:none;
 }
-.nav-btn:hover{background:var(--purple-light);transform:translateY(-1px)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(109,40,217,.5)}
 @media(max-width:768px){.nav-links{display:none}}
 
-/* ── SEÇÕES NORMAIS ── */
-.section{
-  padding:7rem 2rem;position:relative;z-index:1;
-}
-.container{max-width:1060px;margin:0 auto}
-.section-label{
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--purple-light);
-  margin-bottom:1rem;display:block;
-}
-h2{
-  font-size:clamp(1.8rem,3.5vw,2.8rem);
-  font-weight:700;letter-spacing:-.03em;
-  line-height:1.1;margin-bottom:1rem;
-}
-h2 em{font-style:normal;color:var(--gold)}
-.section-sub{
-  color:var(--muted);font-size:1.05rem;
-  max-width:500px;margin-bottom:3.5rem;line-height:1.7;
+/* ── SCROLL JOURNEY ── */
+#journey{position:relative;height:700vh}
+#sticky{
+  position:sticky;top:0;height:100vh;overflow:hidden;
 }
 
-/* Cards de serviço */
-.services-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:1.5rem;
+/* Canvas para WebGL-like com SVG animado */
+.scene{
+  position:absolute;inset:0;
+  opacity:0;visibility:hidden;
+  transition:opacity .6s cubic-bezier(.22,1,.36,1);
 }
-.card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(109,40,217,.15);
-  border-radius:16px;padding:2rem;
-  transition:all .3s;position:relative;overflow:hidden;
+.scene.active{opacity:1;visibility:visible}
+
+/* Fundo de cada cena com movimento de câmera */
+.scene-world{
+  position:absolute;inset:-15%;
+  transition:transform 1.2s cubic-bezier(.22,1,.36,1);
 }
-.card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(109,40,217,.06),transparent);
+.scene.active .scene-world{transform:scale(1.05)}
+.scene:not(.active) .scene-world{transform:scale(1.12)}
+
+/* Overlay gradiente */
+.scene-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(
+    160deg,
+    rgba(4,5,26,.15) 0%,
+    rgba(4,5,26,.4) 40%,
+    rgba(4,5,26,.85) 100%
+  );
+}
+
+/* Conteúdo da cena */
+.scene-content{
+  position:absolute;z-index:10;
+  bottom:12%;left:8%;right:8%;
+}
+.scene-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.68rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#8b5cf6;
+  margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .5s .1s,transform .5s .1s;
+}
+.scene.active .scene-eyebrow{opacity:1;transform:translateY(0)}
+.scene-eyebrow::before{
+  content:'';width:24px;height:1px;background:#8b5cf6;flex-shrink:0;
+}
+.scene-headline{
+  font-size:clamp(2.4rem,5.5vw,5rem);
+  font-weight:700;letter-spacing:-.04em;
+  line-height:1.0;margin-bottom:1.2rem;
+  overflow:hidden;
+}
+.scene-headline .word{
+  display:inline-block;margin-right:.25em;
+  opacity:0;transform:translateY(60px) rotate(3deg);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1),
+             transform .6s cubic-bezier(.22,1,.36,1);
+}
+.scene.active .scene-headline .word{opacity:1;transform:translateY(0) rotate(0)}
+.scene-headline em{font-style:normal;color:#f59e0b}
+.scene-sub{
+  font-size:1.05rem;color:rgba(240,244,255,.65);
+  max-width:520px;line-height:1.7;margin-bottom:2rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s .3s,transform .6s .3s;
+}
+.scene.active .scene-sub{opacity:1;transform:translateY(0)}
+.scene-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;padding:.85rem 2rem;border-radius:50px;
+  text-decoration:none;font-weight:600;font-size:.95rem;
+  box-shadow:0 0 30px rgba(109,40,217,.4);
+  opacity:0;transform:translateY(20px);
+  transition:all .25s,opacity .6s .45s,transform .6s .45s;
+  cursor:none;
+}
+.scene.active .scene-btn{opacity:1;transform:translateY(0)}
+.scene-btn:hover{transform:translateY(-3px)!important;box-shadow:0 0 50px rgba(109,40,217,.6)}
+
+/* Indicador de progresso de cenas */
+#scene-dots{
+  position:absolute;right:2.5rem;top:50%;
+  transform:translateY(-50%);z-index:20;
+  display:flex;flex-direction:column;gap:.6rem;
+}
+.scene-dot{
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transition:all .4s;cursor:none;
+}
+.scene-dot.active{
+  background:#8b5cf6;
+  box-shadow:0 0 8px rgba(139,92,246,.8);
+  transform:scale(1.5);
+}
+
+/* Scroll hint animado */
+#scroll-hint{
+  position:absolute;bottom:5%;left:50%;
+  transform:translateX(-50%);z-index:20;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  transition:opacity .5s;
+}
+#scroll-hint.hidden{opacity:0;pointer-events:none}
+.scroll-line{
+  width:1px;height:50px;
+  background:linear-gradient(to bottom,transparent,#8b5cf6);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+.scroll-text{
+  font-family:'Space Mono',monospace;
+  font-size:.62rem;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.3);
+  writing-mode:vertical-rl;margin-top:.3rem;
+}
+
+/* Número da cena (grande, background) */
+.scene-number{
+  position:absolute;right:5%;bottom:8%;z-index:1;
+  font-family:'Space Mono',monospace;
+  font-size:clamp(8rem,18vw,16rem);
+  font-weight:700;letter-spacing:-.06em;
+  color:rgba(255,255,255,.025);
+  line-height:1;pointer-events:none;
+  transition:opacity .6s;
+  user-select:none;
+}
+
+/* ── SEÇÕES ── */
+section.sec{padding:8rem 2.5rem;position:relative;overflow:hidden}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-label{
+  font-family:'Space Mono',monospace;
+  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:#8b5cf6;margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.sec-label::before{content:'';width:30px;height:1px;background:#8b5cf6}
+h2.sec-h{
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:700;letter-spacing:-.04em;line-height:1.05;
+  margin-bottom:1.2rem;
+}
+h2.sec-h em{font-style:normal;color:#f59e0b}
+.sec-sub{color:rgba(240,244,255,.5);font-size:1rem;max-width:480px;line-height:1.75;margin-bottom:4rem}
+
+/* Grid serviços */
+.srv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;border:1px solid rgba(109,40,217,.1);border-radius:20px;overflow:hidden}
+.srv{
+  background:rgba(255,255,255,.025);
+  padding:2.5rem;transition:background .3s;
+  position:relative;overflow:hidden;
+}
+.srv::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(109,40,217,.4),transparent);
   opacity:0;transition:.3s;
 }
-.card:hover{border-color:rgba(109,40,217,.4);transform:translateY(-4px)}
-.card:hover::before{opacity:1}
-.card-icon{font-size:2rem;margin-bottom:1.2rem;display:block}
-.card h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
-.card p{color:var(--muted);font-size:.9rem;line-height:1.6}
-.card-tag{
-  display:inline-block;margin-top:.8rem;
-  font-size:.72rem;font-family:var(--mono);
-  color:var(--purple-light);
-  background:rgba(109,40,217,.1);
-  padding:.2rem .6rem;border-radius:4px;letter-spacing:.06em;
+.srv:hover{background:rgba(109,40,217,.06)}
+.srv:hover::before{opacity:1}
+.srv-num{
+  font-family:'Space Mono',monospace;font-size:.7rem;
+  color:rgba(139,92,246,.4);letter-spacing:.12em;margin-bottom:1.5rem;
 }
+.srv-icon{font-size:1.8rem;margin-bottom:1rem;display:block}
+.srv h3{font-size:1.05rem;font-weight:600;margin-bottom:.6rem;letter-spacing:-.02em}
+.srv p{color:rgba(240,244,255,.45);font-size:.88rem;line-height:1.65}
 
 /* Processo */
-.process-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:2rem;
+.proc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:3rem}
+.proc-step{position:relative}
+.proc-n{
+  font-family:'Space Mono',monospace;
+  font-size:5rem;font-weight:700;
+  color:rgba(109,40,217,.08);line-height:1;
+  margin-bottom:.5rem;
 }
-.step-n{
-  font-family:var(--mono);font-size:2.5rem;font-weight:700;
-  color:rgba(109,40,217,.2);display:block;line-height:1;margin-bottom:.8rem;
+.proc-step h3{font-size:1rem;font-weight:600;margin-bottom:.5rem;color:#f0f4ff}
+.proc-step p{color:rgba(240,244,255,.45);font-size:.87rem;line-height:1.65}
+.proc-line{
+  position:absolute;top:2.5rem;left:100%;
+  width:100%;height:1px;
+  background:linear-gradient(90deg,rgba(109,40,217,.3),transparent);
 }
-.process-grid h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
-.process-grid p{color:var(--muted);font-size:.88rem;line-height:1.6}
 
 /* Preços */
-.pricing-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:1.5rem;
-}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem}
 .price-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(109,40,217,.15);
-  border-radius:16px;padding:2rem;position:relative;
+  border:1px solid rgba(109,40,217,.12);
+  border-radius:20px;padding:2.5rem;
+  background:rgba(255,255,255,.02);
+  position:relative;transition:border-color .3s,transform .3s;
 }
-.price-card.featured{
-  border-color:var(--purple);
-  background:rgba(109,40,217,.07);
-  box-shadow:0 0 40px rgba(109,40,217,.12);
+.price-card:hover{border-color:rgba(109,40,217,.3);transform:translateY(-4px)}
+.price-card.feat{
+  border-color:rgba(109,40,217,.4);
+  background:rgba(109,40,217,.05);
 }
-.featured-badge{
-  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:var(--purple);color:#fff;
-  padding:.25rem .9rem;border-radius:12px;
-  font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap;
+.feat-tag{
+  position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;padding:.3rem 1.2rem;border-radius:0 0 12px 12px;
+  font-size:.68rem;font-weight:700;font-family:'Space Mono',monospace;
+  letter-spacing:.08em;white-space:nowrap;
 }
-.price-name{font-size:.85rem;color:var(--muted);margin-bottom:.4rem}
-.price-val{font-size:2.2rem;font-weight:700;letter-spacing:-.04em;margin-bottom:.2rem}
-.price-val span{font-size:1rem;font-weight:400;color:var(--muted)}
-.price-desc{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem}
-.price-features{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.5rem}
-.price-features li{font-size:.88rem;color:var(--muted);display:flex;gap:.5rem}
-.price-features li::before{content:'✓';color:var(--purple-light);font-weight:700;flex-shrink:0}
-.price-btn{
-  display:block;text-align:center;padding:.75rem;
-  border-radius:8px;text-decoration:none;font-weight:600;
-  font-size:.9rem;transition:all .2s;cursor:pointer;
-  font-family:var(--font);border:none;width:100%;
+.p-name{font-size:.78rem;color:rgba(240,244,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.p-val{font-size:2.4rem;font-weight:700;letter-spacing:-.05em;line-height:1;margin-bottom:.3rem}
+.p-val span{font-size:.95rem;font-weight:400;color:rgba(240,244,255,.4)}
+.p-desc{color:rgba(240,244,255,.4);font-size:.84rem;margin-bottom:1.8rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(109,40,217,.1)}
+.p-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
+.p-list li{font-size:.87rem;color:rgba(240,244,255,.55);display:flex;align-items:flex-start;gap:.6rem}
+.p-list li::before{content:'—';color:rgba(139,92,246,.5);flex-shrink:0;margin-top:.05em}
+.p-btn{
+  display:block;text-align:center;padding:.8rem;
+  border-radius:50px;font-weight:600;font-size:.88rem;
+  text-decoration:none;transition:all .2s;cursor:none;border:none;
+  width:100%;font-family:'Space Grotesk',sans-serif;
 }
-.price-card.featured .price-btn{background:var(--purple);color:#fff}
-.price-card.featured .price-btn:hover{background:var(--purple-light)}
-.price-card:not(.featured) .price-btn{
-  background:transparent;color:var(--purple-light);
-  border:1px solid rgba(109,40,217,.3);
+.price-card.feat .p-btn{
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;box-shadow:0 0 20px rgba(109,40,217,.3);
 }
-.price-card:not(.featured) .price-btn:hover{background:rgba(109,40,217,.1)}
+.price-card.feat .p-btn:hover{box-shadow:0 0 40px rgba(109,40,217,.5)}
+.price-card:not(.feat) .p-btn{
+  border:1px solid rgba(109,40,217,.25);color:#8b5cf6;background:transparent;
+}
+.price-card:not(.feat) .p-btn:hover{background:rgba(109,40,217,.08)}
 
 /* FAQ */
-.faq-wrap{max-width:680px}
-details{border-bottom:1px solid rgba(109,40,217,.15);padding:1.2rem 0}
+.faq-list{max-width:720px}
+details{border-bottom:1px solid rgba(255,255,255,.05);padding:1.4rem 0}
 summary{
-  cursor:pointer;font-weight:600;font-size:.95rem;
-  list-style:none;display:flex;justify-content:space-between;
-  align-items:center;gap:1rem;
+  cursor:none;font-weight:600;font-size:.95rem;letter-spacing:-.02em;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;color:#f0f4ff;
 }
-summary::after{content:'+';color:var(--purple-light);font-size:1.3rem;flex-shrink:0}
+summary::after{
+  content:'+';color:#8b5cf6;font-size:1.4rem;
+  flex-shrink:0;font-family:'Space Mono',monospace;
+  transition:transform .3s;
+}
 details[open] summary::after{content:'−'}
-details p{color:var(--muted);font-size:.9rem;margin-top:.8rem;line-height:1.7}
+details p{color:rgba(240,244,255,.5);font-size:.9rem;margin-top:1rem;line-height:1.75;max-width:600px}
 
 /* Contato */
-.contact-wrap{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:4rem;align-items:start;
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:3rem}}
+.c-info h2{margin-bottom:1rem}
+.c-info p{color:rgba(240,244,255,.5);line-height:1.75;margin-bottom:2.5rem}
+.c-link{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.2rem;color:rgba(240,244,255,.55);font-size:.92rem;
 }
-@media(max-width:700px){.contact-wrap{grid-template-columns:1fr;gap:2rem}}
-.contact-item{
-  display:flex;align-items:center;gap:.8rem;
-  margin-bottom:1rem;font-size:.95rem;color:var(--muted);
+.c-link a{color:#8b5cf6;text-decoration:none;transition:.2s}
+.c-link a:hover{color:#f0f4ff}
+.c-link strong{color:#f0f4ff}
+.c-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(109,40,217,.12);border:1px solid rgba(109,40,217,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
 }
-.contact-item a{color:var(--purple-light);text-decoration:none;transition:.2s}
-.contact-item a:hover{color:var(--white)}
-.contact-item strong{color:var(--white)}
 .cform{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(109,40,217,.15);
-  border-radius:16px;padding:2rem;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(109,40,217,.12);
+  border-radius:20px;padding:2.5rem;
 }
-.fgroup{margin-bottom:1.2rem}
-.fgroup label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.4rem}
-.fgroup input,.fgroup textarea,.fgroup select{
+.fg{margin-bottom:1.4rem}
+.fg label{display:block;font-size:.75rem;color:rgba(240,244,255,.4);margin-bottom:.5rem;letter-spacing:.08em;text-transform:uppercase}
+.fg input,.fg textarea,.fg select{
   width:100%;background:rgba(255,255,255,.04);
-  border:1px solid rgba(109,40,217,.2);
-  border-radius:8px;padding:.7rem 1rem;
-  color:var(--white);font-size:.95rem;
-  font-family:var(--font);outline:none;transition:.2s;
+  border:1px solid rgba(109,40,217,.15);
+  border-radius:12px;padding:.85rem 1.1rem;
+  color:#f0f4ff;font-size:.92rem;
+  font-family:'Space Grotesk',sans-serif;
+  outline:none;transition:.2s;cursor:none;
+  -webkit-appearance:none;
 }
-.fgroup input:focus,.fgroup textarea:focus,.fgroup select:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px rgba(109,40,217,.15);
+.fg input:focus,.fg textarea:focus,.fg select:focus{
+  border-color:#8b5cf6;background:rgba(109,40,217,.05);
+  box-shadow:0 0 0 3px rgba(109,40,217,.12);
 }
-.fgroup textarea{height:120px;resize:vertical}
-.fgroup select option{background:#04051a}
-.fsubmit{
-  width:100%;background:var(--purple);color:#fff;
-  border:none;padding:.85rem;border-radius:8px;
-  font-size:1rem;font-weight:700;cursor:pointer;
-  transition:all .2s;font-family:var(--font);
+.fg textarea{height:130px;resize:vertical}
+.fg select option{background:#04051a}
+.f-submit{
+  width:100%;background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;border:none;padding:.9rem;border-radius:50px;
+  font-size:.95rem;font-weight:700;cursor:none;
+  font-family:'Space Grotesk',sans-serif;transition:all .25s;
+  box-shadow:0 0 20px rgba(109,40,217,.25);
 }
-.fsubmit:hover{background:var(--purple-light);transform:translateY(-1px)}
+.f-submit:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(109,40,217,.4)}
+.f-or{text-align:center;color:rgba(240,244,255,.25);font-size:.8rem;margin:.8rem 0}
+.f-wa{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;padding:.8rem;border-radius:50px;
+  border:1px solid rgba(109,40,217,.2);color:#8b5cf6;
+  text-decoration:none;font-size:.88rem;font-weight:600;
+  transition:all .2s;cursor:none;
+}
+.f-wa:hover{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.4)}
 
 /* Footer */
 footer{
-  padding:3rem 2rem;
-  border-top:1px solid rgba(109,40,217,.1);
-  text-align:center;position:relative;z-index:1;
+  padding:4rem 2.5rem 3rem;
+  border-top:1px solid rgba(255,255,255,.04);
 }
-.footer-logo{font-family:var(--mono);font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
-.footer-sub{color:var(--dim);font-size:.82rem;margin-bottom:1.5rem}
-.footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
-.footer-links a{color:var(--dim);text-decoration:none;font-size:.82rem;transition:.2s}
-.footer-links a:hover{color:var(--purple-light)}
-.footer-copy{color:var(--dim);font-size:.78rem;margin-top:1.5rem}
+.foot-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:2rem;
+}
+.foot-logo{font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;color:rgba(240,244,255,.6)}
+.foot-links{display:flex;gap:2.5rem;flex-wrap:wrap}
+.foot-links a{color:rgba(240,244,255,.3);text-decoration:none;font-size:.8rem;transition:.2s;cursor:none}
+.foot-links a:hover{color:rgba(240,244,255,.7)}
+.foot-copy{color:rgba(240,244,255,.2);font-size:.75rem;width:100%;text-align:center;margin-top:1rem}
 
-/* Seções alternadas */
-.section-alt{background:rgba(10,12,35,.6)}
+/* Fundo com partículas globais */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
 
-/* Animação reveal ao scroll nas seções normais */
+/* Linha de ruído animado horizontal */
+.noise-line{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%, rgba(109,40,217,.3) 30%,
+    rgba(139,92,246,.5) 50%,
+    rgba(109,40,217,.3) 70%,transparent 100%
+  );
+  animation:scanLine 8s ease-in-out infinite;
+  pointer-events:none;z-index:15;
+  opacity:.4;
+}
+@keyframes scanLine{
+  0%{top:-5%;opacity:0}
+  10%{opacity:.4}
+  90%{opacity:.4}
+  100%{top:105%;opacity:0}
+}
+
+/* Reveal animation */
 .reveal{
   opacity:0;transform:translateY(40px);
-  transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);
+  transition:opacity .8s cubic-bezier(.22,1,.36,1),
+             transform .8s cubic-bezier(.22,1,.36,1);
 }
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-.reveal-delay-4{transition-delay:.4s}
+.reveal.in{opacity:1;transform:translateY(0)}
+.delay-1{transition-delay:.1s}
+.delay-2{transition-delay:.2s}
+.delay-3{transition-delay:.3s}
+.delay-4{transition-delay:.4s}
 
-/* Separador visual */
-.divider{
-  width:60px;height:2px;
-  background:linear-gradient(90deg,var(--purple),var(--gold));
-  margin-bottom:2rem;
-  border-radius:2px;
-}
+/* Seção alternada */
+.sec-dark{background:rgba(6,7,28,.6)}
+
+/* Separador */
+.sep{width:40px;height:1px;background:linear-gradient(90deg,#6d28d9,transparent);margin-bottom:2.5rem}
 </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Barra progresso -->
+<div id="progress"></div>
+
+<!-- Canvas de partículas de fundo -->
+<canvas id="bg-canvas"></canvas>
 
 <!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">🪐 Órbita<span style="color:var(--purple)">.</span>Digital</a>
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-dot">
+      <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="5" fill="#8b5cf6"/><ellipse cx="14" cy="14" rx="13" ry="5" fill="none" stroke="#f59e0b" stroke-width="1" transform="rotate(-20 14 14)" opacity=".7"/><ellipse cx="14" cy="14" rx="11" ry="4" fill="none" stroke="#8b5cf6" stroke-width="1" transform="rotate(15 14 14)" opacity=".5"/></svg>
+    </div>
+    Órbita<span style="color:#6d28d9">.</span>Digital
+  </a>
   <ul class="nav-links">
     <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#processo">Como funciona</a></li>
+    <li><a href="#processo">Processo</a></li>
     <li><a href="#precos">Preços</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
-  <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" class="nav-btn">Orçamento grátis</a>
+  <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="nav-cta">Orçamento grátis</a>
 </nav>
 
-<!-- ── SCROLL JOURNEY ── -->
+<!-- JOURNEY SCROLL -->
 <div id="journey">
-  <div id="journey-sticky">
+  <div id="sticky">
 
-    <!-- CENA 0: Hero espacial -->
-    <div class="scene active" id="scene-0">
-      <div class="space-particles" id="particles-0"></div>
-      <div class="scene-bg" style="background:radial-gradient(ellipse at 60% 40%,#1a0a3a 0%,#04051a 70%)">
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <div class="noise-line"></div>
+
+    <!-- Pontos de progresso -->
+    <div id="scene-dots">
+      <div class="scene-dot active"></div>
+      <div class="scene-dot"></div>
+      <div class="scene-dot"></div>
+      <div class="scene-dot"></div>
+      <div class="scene-dot"></div>
+    </div>
+
+    <!-- Hint scroll -->
+    <div id="scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">scroll</span>
+    </div>
+
+    <!-- CENA 0: HERO -->
+    <div class="scene active" id="s0">
+      <div class="scene-world">
+        <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g1" cx="60%" cy="40%"><stop offset="0%" stop-color="#6d28d9" stop-opacity=".3"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
-            <radialGradient id="g2" cx="20%" cy="70%"><stop offset="0%" stop-color="#f59e0b" stop-opacity=".12"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rg0a" cx="55%" cy="42%"><stop offset="0%" stop-color="#2d1a6e" stop-opacity=".9"/><stop offset="60%" stop-color="#0a0520" stop-opacity=".8"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
+            <radialGradient id="rg0b" cx="55%" cy="42%" r="25%"><stop offset="0%" stop-color="#6d28d9" stop-opacity=".35"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="softglow"><feGaussianBlur stdDeviation="20" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
-          <rect width="1200" height="700" fill="url(#g1)"/>
-          <rect width="1200" height="700" fill="url(#g2)"/>
-          <!-- Planeta central -->
-          <circle cx="680" cy="320" r="160" fill="#1a0a3a" stroke="rgba(109,40,217,.4)" stroke-width="1"/>
-          <circle cx="680" cy="320" r="155" fill="url(#gplanet)" opacity=".8"/>
-          <defs>
-            <radialGradient id="gplanet" cx="35%" cy="35%">
-              <stop offset="0%" stop-color="#2d1b69"/>
-              <stop offset="100%" stop-color="#04051a"/>
-            </radialGradient>
-          </defs>
-          <!-- Anéis orbitais -->
-          <ellipse cx="680" cy="320" rx="280" ry="90" fill="none" stroke="rgba(109,40,217,.2)" stroke-width="1.5" transform="rotate(-15 680 320)"/>
-          <ellipse cx="680" cy="320" rx="220" ry="70" fill="none" stroke="rgba(245,158,11,.15)" stroke-width="1" transform="rotate(10 680 320)"/>
-          <ellipse cx="680" cy="320" rx="340" ry="110" fill="none" stroke="rgba(109,40,217,.1)" stroke-width="1" transform="rotate(-30 680 320)"/>
+          <rect width="1400" height="900" fill="url(#rg0a)"/>
+          <rect width="1400" height="900" fill="url(#rg0b)"/>
+          <!-- Planeta -->
+          <circle cx="820" cy="400" r="220" fill="#0d0720" filter="url(#softglow)"/>
+          <circle cx="820" cy="400" r="218" fill="none" stroke="rgba(109,40,217,.25)" stroke-width="2"/>
+          <!-- Textura planeta -->
+          <ellipse cx="800" cy="380" rx="220" ry="90" fill="rgba(109,40,217,.05)" transform="rotate(-10 800 380)"/>
+          <ellipse cx="840" cy="420" rx="180" ry="60" fill="rgba(245,158,11,.04)" transform="rotate(5 840 420)"/>
+          <!-- Anéis -->
+          <ellipse cx="820" cy="400" rx="340" ry="100" fill="none" stroke="rgba(109,40,217,.18)" stroke-width="2" transform="rotate(-18 820 400)" filter="url(#glow)"/>
+          <ellipse cx="820" cy="400" rx="290" ry="82" fill="none" stroke="rgba(245,158,11,.12)" stroke-width="1.5" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="380" ry="115" fill="none" stroke="rgba(109,40,217,.08)" stroke-width="1" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="420" ry="130" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1" transform="rotate(-18 820 400)"/>
           <!-- Lua -->
-          <circle cx="900" cy="250" r="18" fill="#2d1b69" stroke="rgba(109,40,217,.4)" stroke-width="1"/>
-          <circle cx="440" cy="380" r="10" fill="#f59e0b" opacity=".7"/>
+          <circle cx="1100" cy="300" r="28" fill="#140a30" stroke="rgba(139,92,246,.3)" stroke-width="1.5"/>
+          <circle cx="1105" cy="295" r="8" fill="rgba(109,40,217,.15)"/>
+          <!-- Satélite menor -->
+          <circle cx="560" cy="520" r="14" fill="#f59e0b" opacity=".5" filter="url(#glow)"/>
+          <!-- Estrelas grandes -->
+          <circle cx="200" cy="150" r="2" fill="#fff" opacity=".6"/>
+          <circle cx="1200" cy="200" r="2.5" fill="#fff" opacity=".5"/>
+          <circle cx="350" cy="700" r="1.5" fill="#8b5cf6" opacity=".7"/>
+          <circle cx="1100" cy="650" r="2" fill="#f59e0b" opacity=".5"/>
+          <circle cx="100" cy="400" r="1.5" fill="#fff" opacity=".4"/>
+          <circle cx="1300" cy="500" r="2" fill="#fff" opacity=".4"/>
+          <!-- Nebulosa sutil -->
+          <ellipse cx="300" cy="250" rx="200" ry="120" fill="rgba(109,40,217,.05)" transform="rotate(-20 300 250)"/>
+          <ellipse cx="1100" cy="600" rx="180" ry="100" fill="rgba(245,158,11,.03)" transform="rotate(15 1100 600)"/>
         </svg>
       </div>
-      <div class="scene-content" style="left:6%;bottom:15%;max-width:650px">
-        <span class="scene-label">// Órbita Digital</span>
-        <h1 class="scene-title">Sua empresa merece uma <em>presença digital</em> de verdade</h1>
-        <p class="scene-sub">Sites, design, automação e vídeos para pequenos negócios no Brasil e nos EUA. 100% online, sem complicação.</p>
-        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="scene-cta">💬 Orçamento grátis no WhatsApp</a>
-      </div>
-      <div id="scroll-hint">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        <span>scroll</span>
+      <div class="scene-overlay"></div>
+      <div class="scene-number">00</div>
+      <div class="scene-content">
+        <div class="scene-eyebrow">Agência digital para pequenos negócios</div>
+        <h1 class="scene-headline">
+          <span class="word">Sua</span>
+          <span class="word">empresa</span>
+          <span class="word">merece</span>
+          <span class="word">estar</span><br>
+          <span class="word" style="color:#f59e0b">no</span>
+          <span class="word" style="color:#f59e0b">digital</span>
+          <span class="word">de</span>
+          <span class="word">verdade</span>
+        </h1>
+        <p class="scene-sub">Sites, design, automação e vídeos curtos para negócios no Brasil e nos EUA. 100% online, sem reunião, sem complicação.</p>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="scene-btn">💬 Orçamento grátis no WhatsApp</a>
       </div>
     </div>
 
-    <!-- CENA 1: Sites -->
-    <div class="scene" id="scene-1">
-      <div class="scene-bg" style="background:radial-gradient(ellipse at 30% 50%,#0c1a4a 0%,#04051a 70%)">
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <!-- CENA 1: SITES -->
+    <div class="scene" id="s1">
+      <div class="scene-world">
+        <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g3" cx="30%" cy="50%"><stop offset="0%" stop-color="#1d4ed8" stop-opacity=".25"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rg1" cx="25%" cy="50%"><stop offset="0%" stop-color="#0d2a5c" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
           </defs>
-          <rect width="1200" height="700" fill="url(#g3)"/>
-          <!-- Grid de linhas perspectiva -->
-          <g stroke="rgba(109,40,217,.08)" stroke-width="1">
-            <line x1="600" y1="700" x2="0" y2="200"/><line x1="600" y1="700" x2="150" y2="150"/>
-            <line x1="600" y1="700" x2="300" y2="100"/><line x1="600" y1="700" x2="450" y2="80"/>
-            <line x1="600" y1="700" x2="600" y2="0"/><line x1="600" y1="700" x2="750" y2="80"/>
-            <line x1="600" y1="700" x2="900" y2="100"/><line x1="600" y1="700" x2="1050" y2="150"/>
-            <line x1="600" y1="700" x2="1200" y2="200"/>
-            <!-- Horizontais -->
-            <line x1="0" y1="550" x2="1200" y2="550" opacity=".4"/>
-            <line x1="0" y1="450" x2="1200" y2="450" opacity=".3"/>
-            <line x1="0" y1="350" x2="1200" y2="350" opacity=".2"/>
-            <line x1="0" y1="270" x2="1200" y2="270" opacity=".15"/>
+          <rect width="1400" height="900" fill="url(#rg1)"/>
+          <rect width="1400" height="900" fill="rgba(4,5,26,.3)"/>
+          <!-- Grid perspectiva animado -->
+          <g stroke="rgba(109,40,217,.07)" stroke-width="1">
+            <line x1="700" y1="900" x2="0" y2="300"/>
+            <line x1="700" y1="900" x2="175" y2="200"/>
+            <line x1="700" y1="900" x2="350" y2="140"/>
+            <line x1="700" y1="900" x2="525" y2="110"/>
+            <line x1="700" y1="900" x2="700" y2="100"/>
+            <line x1="700" y1="900" x2="875" y2="110"/>
+            <line x1="700" y1="900" x2="1050" y2="140"/>
+            <line x1="700" y1="900" x2="1225" y2="200"/>
+            <line x1="700" y1="900" x2="1400" y2="300"/>
+            <line x1="0" y1="700" x2="1400" y2="700"/>
+            <line x1="0" y1="600" x2="1400" y2="600"/>
+            <line x1="0" y1="500" x2="1400" y2="500"/>
+            <line x1="0" y1="410" x2="1400" y2="410"/>
+            <line x1="0" y1="330" x2="1400" y2="330"/>
+            <line x1="0" y1="260" x2="1400" y2="260"/>
           </g>
-          <!-- Janela de site flutuante -->
-          <rect x="350" y="80" width="500" height="320" rx="12" fill="rgba(13,16,40,.8)" stroke="rgba(109,40,217,.3)" stroke-width="1"/>
-          <rect x="350" y="80" width="500" height="36" rx="12" fill="rgba(109,40,217,.15)"/>
-          <circle cx="376" cy="98" r="6" fill="rgba(239,68,68,.6)"/>
-          <circle cx="396" cy="98" r="6" fill="rgba(251,191,36,.6)"/>
-          <circle cx="416" cy="98" r="6" fill="rgba(34,197,94,.6)"/>
-          <rect x="370" y="130" width="460" height="12" rx="4" fill="rgba(109,40,217,.15)"/>
-          <rect x="370" y="155" width="300" height="8" rx="4" fill="rgba(255,255,255,.06)"/>
-          <rect x="370" y="175" width="260" height="8" rx="4" fill="rgba(255,255,255,.06)"/>
-          <rect x="370" y="210" width="140" height="36" rx="8" fill="rgba(109,40,217,.4)"/>
-          <rect x="370" y="270" width="180" height="80" rx="8" fill="rgba(255,255,255,.04)" stroke="rgba(109,40,217,.1)" stroke-width="1"/>
-          <rect x="560" y="270" width="180" height="80" rx="8" fill="rgba(255,255,255,.04)" stroke="rgba(109,40,217,.1)" stroke-width="1"/>
-          <rect x="750" y="270" width="80" height="80" rx="8" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
+          <!-- Browser window -->
+          <rect x="550" y="80" width="640" height="420" rx="14" fill="rgba(8,10,30,.9)" stroke="rgba(109,40,217,.25)" stroke-width="1"/>
+          <rect x="550" y="80" width="640" height="44" rx="14" fill="rgba(109,40,217,.12)"/>
+          <rect x="550" y="108" width="640" height="16" fill="rgba(109,40,217,.08)"/>
+          <circle cx="576" cy="102" r="7" fill="rgba(239,68,68,.5)"/>
+          <circle cx="598" cy="102" r="7" fill="rgba(234,179,8,.5)"/>
+          <circle cx="620" cy="102" r="7" fill="rgba(34,197,94,.5)"/>
+          <!-- URL bar -->
+          <rect x="640" y="92" width="420" height="20" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <text x="652" y="107" font-family="monospace" font-size="11" fill="rgba(255,255,255,.35)">orbitadigital.com</text>
+          <!-- Hero do site interno -->
+          <rect x="560" y="135" width="620" height="180" rx="4" fill="rgba(109,40,217,.06)"/>
+          <text x="580" y="210" font-family="monospace" font-size="28" fill="rgba(240,244,255,.8)" font-weight="bold">Órbita Digital</text>
+          <text x="580" y="240" font-family="monospace" font-size="13" fill="rgba(240,244,255,.35)">Presença digital para pequenos negócios</text>
+          <rect x="580" y="262" width="130" height="34" rx="17" fill="rgba(109,40,217,.5)"/>
+          <!-- Cards do site -->
+          <rect x="560" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
+          <rect x="760" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
+          <rect x="960" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
+          <!-- Footer site -->
+          <rect x="560" y="440" width="620" height="50" rx="4" fill="rgba(0,0,0,.2)"/>
+          <!-- Seta glow -->
+          <circle cx="550" cy="300" r="40" fill="rgba(109,40,217,.08)"/>
+          <text x="535" y="307" font-size="24" fill="rgba(109,40,217,.4)">↗</text>
         </svg>
       </div>
+      <div class="scene-overlay"></div>
+      <div class="scene-number">01</div>
       <div class="scene-content">
-        <span class="scene-label">// 01 — Sites profissionais</span>
-        <h2 class="scene-title">Seu negócio na internet em <em>5 dias</em></h2>
-        <p class="scene-sub">Sites rápidos, responsivos e otimizados para o Google. Do design à publicação — sem você precisar entender de tecnologia.</p>
-        <a href="#servicos" class="scene-cta">Ver serviços →</a>
+        <div class="scene-eyebrow">01 — Sites profissionais</div>
+        <h2 class="scene-headline">
+          <span class="word">Seu</span>
+          <span class="word">negócio</span>
+          <span class="word">na</span>
+          <span class="word">internet</span>
+          <span class="word">em</span>
+          <span class="word" style="color:#f59e0b">5 dias</span>
+        </h2>
+        <p class="scene-sub">Rápido, responsivo e otimizado para o Google. Do design à publicação — sem você precisar entender de tecnologia.</p>
+        <a href="#servicos" class="scene-btn">Ver serviços →</a>
       </div>
     </div>
 
-    <!-- CENA 2: Design -->
-    <div class="scene" id="scene-2">
-      <div class="scene-bg" style="background:radial-gradient(ellipse at 70% 30%,#2d1248 0%,#04051a 70%)">
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <!-- CENA 2: DESIGN -->
+    <div class="scene" id="s2">
+      <div class="scene-world">
+        <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g4" cx="70%" cy="30%"><stop offset="0%" stop-color="#9333ea" stop-opacity=".2"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rg2" cx="75%" cy="35%"><stop offset="0%" stop-color="#3b0d6e" stop-opacity=".8"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
           </defs>
-          <rect width="1200" height="700" fill="url(#g4)"/>
-          <!-- Paleta de cores flutuante -->
-          <rect x="700" y="100" width="380" height="460" rx="20" fill="rgba(13,8,30,.7)" stroke="rgba(147,51,234,.2)" stroke-width="1"/>
-          <rect x="720" y="130" width="340" height="180" rx="12" fill="rgba(109,40,217,.15)" stroke="rgba(109,40,217,.2)" stroke-width="1"/>
-          <text x="740" y="225" font-family="monospace" font-size="22" fill="rgba(245,158,11,.9)" font-weight="bold">Órbita</text>
-          <text x="740" y="255" font-family="monospace" font-size="22" fill="rgba(109,40,217,.9)" font-weight="bold">Digital</text>
-          <rect x="720" y="325" width="60" height="60" rx="8" fill="#6d28d9"/>
-          <rect x="790" y="325" width="60" height="60" rx="8" fill="#f59e0b"/>
-          <rect x="860" y="325" width="60" height="60" rx="8" fill="#04051a" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-          <rect x="930" y="325" width="60" height="60" rx="8" fill="#8b5cf6"/>
-          <rect x="720" y="405" width="340" height="8" rx="4" fill="rgba(255,255,255,.08)"/>
-          <rect x="720" y="425" width="240" height="8" rx="4" fill="rgba(255,255,255,.08)"/>
-          <rect x="720" y="445" width="160" height="8" rx="4" fill="rgba(255,255,255,.08)"/>
-          <rect x="720" y="490" width="160" height="36" rx="8" fill="rgba(109,40,217,.4)"/>
+          <rect width="1400" height="900" fill="url(#rg2)"/>
+          <!-- Formas geométricas flutuando -->
+          <rect x="700" y="80" width="480" height="600" rx="24" fill="rgba(10,6,26,.85)" stroke="rgba(139,92,246,.15)" stroke-width="1" transform="rotate(3 940 380)"/>
+          <!-- Swatches de cor -->
+          <rect x="730" y="110" width="420" height="160" rx="16" fill="rgba(109,40,217,.12)" stroke="rgba(109,40,217,.2)" stroke-width="1"/>
+          <text x="750" y="180" font-family="'Space Grotesk',sans-serif" font-size="32" fill="#f0f4ff" font-weight="700">Órbita</text>
+          <text x="750" y="222" font-family="'Space Grotesk',sans-serif" font-size="32" fill="#8b5cf6" font-weight="700">Digital</text>
+          <!-- Paleta -->
+          <rect x="730" y="290" width="80" height="80" rx="12" fill="#6d28d9"/>
+          <rect x="820" y="290" width="80" height="80" rx="12" fill="#8b5cf6"/>
+          <rect x="910" y="290" width="80" height="80" rx="12" fill="#f59e0b"/>
+          <rect x="1000" y="290" width="80" height="80" rx="12" fill="#04051a" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+          <rect x="1090" y="290" width="56" height="80" rx="12" fill="rgba(240,244,255,.06)"/>
+          <!-- Typography -->
+          <text x="730" y="420" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)" letter-spacing="4">SPACE GROTESK / SPACE MONO</text>
+          <rect x="730" y="435" width="420" height="1" fill="rgba(255,255,255,.05)"/>
+          <text x="730" y="475" font-family="'Space Grotesk',sans-serif" font-size="42" fill="rgba(240,244,255,.7)" font-weight="700">Aa Bb Cc</text>
+          <text x="730" y="510" font-family="monospace" font-size="20" fill="rgba(139,92,246,.6)">01 02 03 04</text>
+          <!-- Logo mark -->
+          <circle cx="320" cy="380" r="120" fill="rgba(109,40,217,.06)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
+          <circle cx="320" cy="380" r="40" fill="rgba(109,40,217,.2)"/>
+          <ellipse cx="320" cy="380" rx="100" ry="35" fill="none" stroke="rgba(245,158,11,.3)" stroke-width="2" transform="rotate(-20 320 380)"/>
         </svg>
       </div>
+      <div class="scene-overlay"></div>
+      <div class="scene-number">02</div>
       <div class="scene-content">
-        <span class="scene-label">// 02 — Design gráfico</span>
-        <h2 class="scene-title">Identidade visual que <em>vende</em></h2>
-        <p class="scene-sub">Logos, posts para Instagram, cardápios digitais e banners. Sua marca fica profissional e consistente em todos os lugares.</p>
-        <a href="#servicos" class="scene-cta">Quero um design →</a>
+        <div class="scene-eyebrow">02 — Design gráfico</div>
+        <h2 class="scene-headline">
+          <span class="word">Identidade</span>
+          <span class="word">visual</span>
+          <span class="word">que</span>
+          <span class="word" style="color:#f59e0b">vende</span>
+        </h2>
+        <p class="scene-sub">Logos, posts para Instagram, cardápios digitais e banners. Sua marca consistente em todos os canais.</p>
+        <a href="#servicos" class="scene-btn">Quero um design →</a>
       </div>
     </div>
 
-    <!-- CENA 3: Automação -->
-    <div class="scene" id="scene-3">
-      <div class="scene-bg" style="background:radial-gradient(ellipse at 50% 60%,#0a2a1a 0%,#04051a 70%)">
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <!-- CENA 3: AUTOMAÇÃO -->
+    <div class="scene" id="s3">
+      <div class="scene-world">
+        <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g5" cx="50%" cy="60%"><stop offset="0%" stop-color="#059669" stop-opacity=".2"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rg3" cx="45%" cy="55%"><stop offset="0%" stop-color="#052e1c" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
           </defs>
-          <rect width="1200" height="700" fill="url(#g5)"/>
-          <!-- Chat/bot interface -->
-          <rect x="200" y="150" width="340" height="420" rx="20" fill="rgba(10,30,20,.8)" stroke="rgba(5,150,105,.2)" stroke-width="1"/>
-          <!-- Mensagens -->
-          <rect x="220" y="190" width="200" height="40" rx="12" fill="rgba(5,150,105,.2)"/>
-          <rect x="320" y="250" width="180" height="40" rx="12" fill="rgba(109,40,217,.2)"/>
-          <rect x="220" y="310" width="220" height="40" rx="12" fill="rgba(5,150,105,.2)"/>
-          <rect x="340" y="370" width="160" height="40" rx="12" fill="rgba(109,40,217,.2)"/>
-          <rect x="220" y="430" width="200" height="40" rx="12" fill="rgba(5,150,105,.2)"/>
-          <rect x="220" y="510" width="300" height="40" rx="16" fill="rgba(255,255,255,.04)" stroke="rgba(5,150,105,.2)" stroke-width="1"/>
-          <!-- Stats cards -->
-          <rect x="580" y="180" width="200" height="100" rx="12" fill="rgba(10,30,20,.8)" stroke="rgba(5,150,105,.2)" stroke-width="1"/>
-          <text x="600" y="235" font-family="monospace" font-size="32" fill="rgba(5,150,105,.9)" font-weight="bold">98%</text>
-          <rect x="580" y="300" width="200" height="100" rx="12" fill="rgba(10,30,20,.8)" stroke="rgba(109,40,217,.2)" stroke-width="1"/>
-          <text x="600" y="355" font-family="monospace" font-size="32" fill="rgba(109,40,217,.9)" font-weight="bold">24/7</text>
-          <rect x="580" y="420" width="200" height="100" rx="12" fill="rgba(10,30,20,.8)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
-          <text x="600" y="475" font-family="monospace" font-size="32" fill="rgba(245,158,11,.9)" font-weight="bold">+3x</text>
+          <rect width="1400" height="900" fill="url(#rg3)"/>
+          <!-- Terminal/código -->
+          <rect x="100" y="100" width="560" height="480" rx="16" fill="rgba(4,8,20,.95)" stroke="rgba(5,150,105,.12)" stroke-width="1"/>
+          <rect x="100" y="100" width="560" height="42" rx="16" fill="rgba(5,150,105,.08)"/>
+          <rect x="100" y="126" width="560" height="16" fill="rgba(5,150,105,.04)"/>
+          <circle cx="126" cy="121" r="6" fill="rgba(239,68,68,.4)"/>
+          <circle cx="146" cy="121" r="6" fill="rgba(234,179,8,.4)"/>
+          <circle cx="166" cy="121" r="6" fill="rgba(34,197,94,.4)"/>
+          <!-- Linhas de código -->
+          <text x="120" y="170" font-family="monospace" font-size="13" fill="rgba(5,150,105,.8)">$ orbit --auto-post instagram</text>
+          <text x="120" y="195" font-family="monospace" font-size="13" fill="rgba(255,255,255,.3)">→ Agendando 12 posts...</text>
+          <text x="120" y="220" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post seg 09:00 agendado</text>
+          <text x="120" y="245" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post ter 11:00 agendado</text>
+          <text x="120" y="270" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post qua 19:00 agendado</text>
+          <text x="120" y="295" font-family="monospace" font-size="13" fill="rgba(255,255,255,.2)">...</text>
+          <text x="120" y="330" font-family="monospace" font-size="13" fill="rgba(139,92,246,.8)">$ orbit --bot whatsapp start</text>
+          <text x="120" y="355" font-family="monospace" font-size="13" fill="rgba(255,255,255,.3)">→ Bot ativo 24/7</text>
+          <text x="120" y="380" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ 47 mensagens respondidas</text>
+          <text x="120" y="405" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ 12 leads capturados hoje</text>
+          <text x="120" y="440" font-family="monospace" font-size="13" fill="rgba(139,92,246,.8)">$ orbit --report generate</text>
+          <text x="120" y="465" font-family="monospace" font-size="13" fill="rgba(245,158,11,.6)">📊 +340% alcance este mês</text>
+          <text x="120" y="500" font-family="monospace" font-size="13" fill="rgba(255,255,255,.5)">█</text>
+          <!-- Stats -->
+          <rect x="720" y="160" width="220" height="110" rx="14" fill="rgba(5,150,105,.06)" stroke="rgba(5,150,105,.15)" stroke-width="1"/>
+          <text x="740" y="210" font-family="monospace" font-size="38" fill="rgba(5,150,105,.9)" font-weight="bold">24/7</text>
+          <text x="740" y="242" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">BOT ATIVO</text>
+          <rect x="720" y="290" width="220" height="110" rx="14" fill="rgba(109,40,217,.06)" stroke="rgba(109,40,217,.15)" stroke-width="1"/>
+          <text x="740" y="340" font-family="monospace" font-size="38" fill="rgba(139,92,246,.9)" font-weight="bold">+3x</text>
+          <text x="740" y="372" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">MAIS ALCANCE</text>
+          <rect x="720" y="420" width="220" height="110" rx="14" fill="rgba(245,158,11,.06)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+          <text x="740" y="470" font-family="monospace" font-size="38" fill="rgba(245,158,11,.9)" font-weight="bold">98%</text>
+          <text x="740" y="502" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">RESPOSTAS AUTO</text>
         </svg>
       </div>
+      <div class="scene-overlay"></div>
+      <div class="scene-number">03</div>
       <div class="scene-content">
-        <span class="scene-label">// 03 — Automação e social media</span>
-        <h2 class="scene-title">Suas redes no <em>piloto automático</em></h2>
-        <p class="scene-sub">Posts agendados semanalmente, bot de atendimento no WhatsApp e Instagram. Você foca no negócio, a gente cuida das redes.</p>
-        <a href="#servicos" class="scene-cta">Automatizar agora →</a>
+        <div class="scene-eyebrow">03 — Automação e social media</div>
+        <h2 class="scene-headline">
+          <span class="word">Redes</span>
+          <span class="word">sociais</span>
+          <span class="word">no</span>
+          <span class="word" style="color:#f59e0b">piloto</span>
+          <span class="word" style="color:#f59e0b">automático</span>
+        </h2>
+        <p class="scene-sub">Posts agendados, bot de atendimento 24/7 no WhatsApp e Instagram. Você foca no negócio, a gente faz o resto.</p>
+        <a href="#servicos" class="scene-btn">Automatizar agora →</a>
       </div>
     </div>
 
-    <!-- CENA 4: Vídeos / CTA Final -->
-    <div class="scene" id="scene-4">
-      <div class="scene-bg" style="background:radial-gradient(ellipse at 50% 50%,#2a1a00 0%,#04051a 70%)">
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <!-- CENA 4: VÍDEOS / CTA -->
+    <div class="scene" id="s4">
+      <div class="scene-world">
+        <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g6" cx="50%" cy="50%"><stop offset="0%" stop-color="#d97706" stop-opacity=".25"/><stop offset="100%" stop-color="#04051a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rg4" cx="50%" cy="45%"><stop offset="0%" stop-color="#3a1800" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
           </defs>
-          <rect width="1200" height="700" fill="url(#g6)"/>
-          <!-- Frames de vídeo vertical (Reels/TikTok) -->
-          <rect x="280" y="100" width="180" height="320" rx="16" fill="rgba(20,15,5,.8)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
-          <polygon points="355,230 355,280 395,255" fill="rgba(245,158,11,.6)"/>
-          <rect x="490" y="60" width="180" height="320" rx="16" fill="rgba(20,15,5,.8)" stroke="rgba(109,40,217,.3)" stroke-width="1.5"/>
-          <polygon points="565,190 565,240 605,215" fill="rgba(109,40,217,.7)"/>
-          <rect x="700" y="100" width="180" height="320" rx="16" fill="rgba(20,15,5,.8)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
-          <polygon points="775,230 775,280 815,255" fill="rgba(245,158,11,.6)"/>
-          <!-- Likes/views flutuando -->
-          <text x="300" y="460" font-family="monospace" font-size="14" fill="rgba(245,158,11,.6)">❤️ 12.4k</text>
-          <text x="500" y="420" font-family="monospace" font-size="14" fill="rgba(109,40,217,.7)">▶ 89k views</text>
-          <text x="700" y="460" font-family="monospace" font-size="14" fill="rgba(245,158,11,.6)">🔁 3.2k</text>
+          <rect width="1400" height="900" fill="url(#rg4)"/>
+          <rect width="1400" height="900" fill="rgba(4,5,26,.2)"/>
+          <!-- Phones com vídeos verticais -->
+          <rect x="230" y="80" width="210" height="380" rx="24" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
+          <rect x="238" y="110" width="194" height="340" rx="16" fill="rgba(109,40,217,.08)"/>
+          <polygon points="310,265 310,315 360,290" fill="rgba(245,158,11,.7)"/>
+          <rect x="238" y="460" width="194" height="14" rx="7" fill="rgba(255,255,255,.05)"/>
+          <rect x="238" y="478" width="130" height="14" rx="7" fill="rgba(255,255,255,.03)"/>
+
+          <rect x="480" y="40" width="230" height="415" rx="26" fill="rgba(10,6,18,.95)" stroke="rgba(109,40,217,.3)" stroke-width="2"/>
+          <rect x="489" y="72" width="212" height="370" rx="18" fill="rgba(109,40,217,.06)"/>
+          <polygon points="568,240 568,296 626,268" fill="rgba(139,92,246,.8)"/>
+          <text x="489" y="465" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">❤️ 12.4k  💬 847  ↗ 3.2k</text>
+
+          <rect x="760" y="80" width="210" height="380" rx="24" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
+          <rect x="768" y="110" width="194" height="340" rx="16" fill="rgba(245,158,11,.05)"/>
+          <polygon points="840,265 840,315 890,290" fill="rgba(245,158,11,.7)"/>
+
+          <!-- Métricas flutuantes -->
+          <rect x="1020" y="150" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+          <text x="1040" y="192" font-family="monospace" font-size="26" fill="rgba(245,158,11,.9)" font-weight="bold">89K</text>
+          <text x="1090" y="192" font-family="monospace" font-size="12" fill="rgba(255,255,255,.3)"> views</text>
+          <rect x="1020" y="240" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(109,40,217,.15)" stroke-width="1"/>
+          <text x="1040" y="283" font-family="monospace" font-size="26" fill="rgba(139,92,246,.9)" font-weight="bold">+340%</text>
+          <text x="1040" y="302" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">alcance orgânico</text>
+          <rect x="1020" y="330" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(5,150,105,.15)" stroke-width="1"/>
+          <text x="1040" y="373" font-family="monospace" font-size="26" fill="rgba(5,150,105,.9)" font-weight="bold">4.8★</text>
+          <text x="1040" y="392" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">satisfação clientes</text>
         </svg>
       </div>
-      <div class="scene-content" style="text-align:center;left:50%;transform:translateX(-50%);bottom:15%;width:90%;max-width:700px">
-        <span class="scene-label" style="text-align:center;display:block">// 04 — Vídeos curtos</span>
-        <h2 class="scene-title" style="max-width:100%;text-align:center">Reels e TikTok que <em>engajam</em></h2>
-        <p class="scene-sub" style="max-width:500px;margin:0 auto 1.5rem;text-align:center">Você grava, a gente edita e posta. Cortes dinâmicos, legendas animadas e trilha sonora inclusos.</p>
-        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Quero%20come%C3%A7ar%20com%20a%20%C3%93rbita%20Digital." target="_blank" class="scene-cta" style="margin:0 auto">🚀 Começar agora</a>
+      <div class="scene-overlay"></div>
+      <div class="scene-number">04</div>
+      <div class="scene-content" style="text-align:center;left:50%;transform:translateX(-50%);bottom:12%;width:90%;max-width:760px">
+        <div class="scene-eyebrow" style="justify-content:center">04 — Vídeos curtos</div>
+        <h2 class="scene-headline" style="max-width:100%;text-align:center">
+          <span class="word">Reels</span>
+          <span class="word">e</span>
+          <span class="word">TikTok</span>
+          <span class="word">que</span>
+          <span class="word" style="color:#f59e0b">engajam</span>
+        </h2>
+        <p class="scene-sub" style="max-width:520px;margin:0 auto 2rem;text-align:center">Você grava, a gente edita e posta. Cortes dinâmicos, legendas animadas e trilha sonora inclusos.</p>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Quero%20come%C3%A7ar." target="_blank" class="scene-btn" style="margin:0 auto">🚀 Começar agora</a>
       </div>
     </div>
 
-  </div><!-- /journey-sticky -->
-</div><!-- /journey -->
+  </div>
+</div>
 
-<!-- ── SEÇÕES NORMAIS ── -->
-
-<section id="servicos" class="section">
-  <div class="container">
+<!-- SEÇÕES -->
+<section id="servicos" class="sec">
+  <div class="sec-inner">
     <div class="reveal">
-      <span class="section-label">// O que fazemos</span>
-      <h2>Tudo que seu negócio precisa, <em>em um lugar só</em></h2>
-      <div class="divider"></div>
+      <div class="sec-label">O que fazemos</div>
+      <h2 class="sec-h">Tudo que seu negócio precisa,<br><em>em um lugar só</em></h2>
+      <div class="sep"></div>
     </div>
-    <div class="services-grid">
-      <div class="card reveal reveal-delay-1">
-        <span class="card-icon">🌐</span>
-        <h3>Site profissional</h3>
-        <p>Rápido, responsivo e otimizado para o Google. Ideal para quem ainda não está online ou quer modernizar.</p>
-        <span class="card-tag">ENTREGA RÁPIDA</span>
+    <div class="srv-grid reveal delay-1">
+      <div class="srv"><div class="srv-num">01</div><span class="srv-icon">🌐</span><h3>Site profissional</h3><p>Rápido, responsivo e otimizado para o Google. Ideal para quem ainda não está online ou quer modernizar o site antigo.</p></div>
+      <div class="srv"><div class="srv-num">02</div><span class="srv-icon">🎨</span><h3>Design gráfico</h3><p>Posts para Instagram, logos, cardápios digitais e banners com identidade visual consistente para o seu negócio.</p></div>
+      <div class="srv"><div class="srv-num">03</div><span class="srv-icon">🤖</span><h3>Automação e social media</h3><p>Gestão de redes sociais e bots de atendimento no WhatsApp e Instagram para responder clientes automaticamente.</p></div>
+      <div class="srv"><div class="srv-num">04</div><span class="srv-icon">🎬</span><h3>Edição de vídeos curtos</h3><p>Reels, TikTok e Shorts — o formato que mais gera alcance orgânico para pequenos negócios hoje.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="processo" class="sec sec-dark">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sec-label">Como funciona</div>
+      <h2 class="sec-h">Do primeiro contato<br>ao <em>resultado</em></h2>
+      <div class="sep"></div>
+    </div>
+    <div class="proc-grid">
+      <div class="reveal delay-1"><div class="proc-n">01</div><h3>Você conta o que precisa</h3><p>Manda uma mensagem pelo WhatsApp ou formulário. Sem reunião, sem papelada.</p></div>
+      <div class="reveal delay-2"><div class="proc-n">02</div><h3>Recebe o orçamento</h3><p>Em até 24h você recebe uma proposta clara com prazo e valor.</p></div>
+      <div class="reveal delay-3"><div class="proc-n">03</div><h3>A gente executa</h3><p>Trabalhamos enquanto você foca no negócio. Atualizações pelo WhatsApp.</p></div>
+      <div class="reveal delay-4"><div class="proc-n">04</div><h3>Você aprova e vai ao ar</h3><p>Revisões incluídas. Entregamos só quando você estiver satisfeito.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="precos" class="sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sec-label">Preços</div>
+      <h2 class="sec-h">Planos para cada<br><em>tamanho de negócio</em></h2>
+      <p class="sec-sub">Preços em BRL para o Brasil. Clientes nos EUA recebem proposta em USD.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card reveal delay-1">
+        <div class="p-name">Presença</div>
+        <div class="p-val">R$ 497<span> / único</span></div>
+        <div class="p-desc">Para quem precisa aparecer online o quanto antes.</div>
+        <ul class="p-list"><li>Site de 1 página (landing page)</li><li>Formulário de contato</li><li>Otimizado para Google</li><li>Entrega em até 5 dias</li></ul>
+        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Presen%C3%A7a.','_blank')">Quero esse plano →</button>
       </div>
-      <div class="card reveal reveal-delay-2">
-        <span class="card-icon">🎨</span>
-        <h3>Design gráfico</h3>
-        <p>Posts para Instagram, logos, cardápios digitais e banners com identidade visual consistente.</p>
-        <span class="card-tag">IDENTIDADE VISUAL</span>
+      <div class="price-card feat reveal delay-2">
+        <div class="feat-tag">★ Mais popular</div>
+        <div class="p-name">Crescimento</div>
+        <div class="p-val">R$ 997<span> / mês</span></div>
+        <div class="p-desc">Site + gestão de redes sociais todo mês.</div>
+        <ul class="p-list"><li>Site completo com várias páginas</li><li>12 posts/mês para Instagram</li><li>Agendamento automático</li><li>Relatório mensal de desempenho</li><li>Suporte via WhatsApp</li></ul>
+        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Crescimento.','_blank')">Quero esse plano →</button>
       </div>
-      <div class="card reveal reveal-delay-3">
-        <span class="card-icon">🤖</span>
-        <h3>Automação e social media</h3>
-        <p>Gestão de redes sociais e bots de atendimento no WhatsApp e Instagram.</p>
-        <span class="card-tag">PILOTO AUTOMÁTICO</span>
-      </div>
-      <div class="card reveal reveal-delay-4">
-        <span class="card-icon">🎬</span>
-        <h3>Edição de vídeos curtos</h3>
-        <p>Reels, TikTok e Shorts — o formato que mais gera alcance orgânico para pequenos negócios hoje.</p>
-        <span class="card-tag">MAIS ALCANCE</span>
+      <div class="price-card reveal delay-3">
+        <div class="p-name">Autoridade</div>
+        <div class="p-val">R$ 1.997<span> / mês</span></div>
+        <div class="p-desc">Solução completa para dominar o digital.</div>
+        <ul class="p-list"><li>Tudo do plano Crescimento</li><li>4 vídeos curtos editados/mês</li><li>Bot de atendimento WhatsApp</li><li>Design gráfico ilimitado</li><li>Prioridade no suporte</li></ul>
+        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Autoridade.','_blank')">Quero esse plano →</button>
       </div>
     </div>
   </div>
 </section>
 
-<section id="processo" class="section section-alt">
-  <div class="container">
+<section class="sec sec-dark">
+  <div class="sec-inner">
     <div class="reveal">
-      <span class="section-label">// Como funciona</span>
-      <h2>Do primeiro contato ao <em>resultado</em></h2>
-      <div class="divider"></div>
+      <div class="sec-label">Dúvidas</div>
+      <h2 class="sec-h">Perguntas <em>frequentes</em></h2>
     </div>
-    <div class="process-grid">
-      <div class="reveal reveal-delay-1"><span class="step-n">01</span><h3>Você conta o que precisa</h3><p>Manda uma mensagem pelo WhatsApp ou formulário. Sem reunião, sem papelada.</p></div>
-      <div class="reveal reveal-delay-2"><span class="step-n">02</span><h3>Recebe o orçamento</h3><p>Em até 24h você recebe uma proposta clara com prazo e valor.</p></div>
-      <div class="reveal reveal-delay-3"><span class="step-n">03</span><h3>A gente executa</h3><p>Trabalhamos enquanto você foca no negócio. Atualizações pelo WhatsApp.</p></div>
-      <div class="reveal reveal-delay-4"><span class="step-n">04</span><h3>Você aprova e vai ao ar</h3><p>Revisões incluídas. Entregamos só quando você estiver satisfeito.</p></div>
+    <div class="faq-list">
+      <details class="reveal delay-1"><summary>Preciso ir a algum lugar para contratar?</summary><p>Não. 100% remoto — WhatsApp, email ou videochamada. Atendemos Brasil e EUA sem nenhuma reunião presencial.</p></details>
+      <details class="reveal delay-2"><summary>Como é feito o pagamento?</summary><p>Brasil: Pix ou cartão. EUA: Wise, PayPal ou cartão internacional.</p></details>
+      <details class="reveal delay-3"><summary>Quanto tempo leva para entregar?</summary><p>Site simples: até 5 dias após aprovação do conteúdo. Projetos maiores têm prazo combinado previamente.</p></details>
+      <details class="reveal delay-4"><summary>Posso contratar apenas um serviço?</summary><p>Sim! Cada serviço pode ser contratado separadamente ou combinado em um plano personalizado conforme sua necessidade.</p></details>
+      <details class="reveal"><summary>Vocês atendem qualquer tipo de negócio?</summary><p>Sim — restaurantes, clínicas, lojas, prestadores de serviço, profissionais liberais e muito mais.</p></details>
     </div>
   </div>
 </section>
 
-<section id="precos" class="section">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">// Preços</span>
-      <h2>Planos para cada <em>tamanho de negócio</em></h2>
-      <p class="section-sub">Preços em BRL para o Brasil. Clientes nos EUA recebem proposta em USD.</p>
-    </div>
-    <div class="pricing-grid">
-      <div class="price-card reveal reveal-delay-1">
-        <div class="price-name">Presença</div>
-        <div class="price-val">R$ 497<span> / único</span></div>
-        <div class="price-desc">Para quem precisa aparecer online rápido.</div>
-        <ul class="price-features">
-          <li>Site de 1 página (landing page)</li>
-          <li>Formulário de contato</li>
-          <li>Otimizado para Google</li>
-          <li>Entrega em até 5 dias</li>
-        </ul>
-        <button class="price-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Presen%C3%A7a.','_blank')">Quero esse plano →</button>
-      </div>
-      <div class="price-card featured reveal reveal-delay-2">
-        <div class="featured-badge">⭐ Mais popular</div>
-        <div class="price-name">Crescimento</div>
-        <div class="price-val">R$ 997<span> / mês</span></div>
-        <div class="price-desc">Site + gestão de redes todo mês.</div>
-        <ul class="price-features">
-          <li>Site completo com várias páginas</li>
-          <li>12 posts/mês para Instagram</li>
-          <li>Agendamento automático</li>
-          <li>Relatório mensal de desempenho</li>
-          <li>Suporte via WhatsApp</li>
-        </ul>
-        <button class="price-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Crescimento.','_blank')">Quero esse plano →</button>
-      </div>
-      <div class="price-card reveal reveal-delay-3">
-        <div class="price-name">Autoridade</div>
-        <div class="price-val">R$ 1.997<span> / mês</span></div>
-        <div class="price-desc">Solução completa para dominar o digital.</div>
-        <ul class="price-features">
-          <li>Tudo do plano Crescimento</li>
-          <li>4 vídeos curtos editados/mês</li>
-          <li>Bot de atendimento WhatsApp</li>
-          <li>Design gráfico ilimitado</li>
-          <li>Prioridade no suporte</li>
-        </ul>
-        <button class="price-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Autoridade.','_blank')">Quero esse plano →</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-alt">
-  <div class="container">
-    <div class="reveal">
-      <span class="section-label">// Dúvidas</span>
-      <h2>Perguntas <em>frequentes</em></h2>
-    </div>
-    <div class="faq-wrap">
-      <details class="reveal reveal-delay-1"><summary>Preciso ir a algum lugar para contratar?</summary><p>Não. 100% remoto — WhatsApp, email ou videochamada. Atendemos Brasil e EUA.</p></details>
-      <details class="reveal reveal-delay-2"><summary>Como é feito o pagamento?</summary><p>Brasil: Pix ou cartão. EUA: Wise, PayPal ou cartão internacional.</p></details>
-      <details class="reveal reveal-delay-3"><summary>Quanto tempo leva para entregar?</summary><p>Site simples: até 5 dias após aprovação do conteúdo. Projetos maiores têm prazo combinado.</p></details>
-      <details class="reveal reveal-delay-4"><summary>Posso contratar apenas um serviço?</summary><p>Sim! Cada serviço pode ser contratado separadamente ou combinado em um plano.</p></details>
-    </div>
-  </div>
-</section>
-
-<section id="contato" class="section">
-  <div class="container">
-    <div class="contact-wrap">
+<section id="contato" class="sec">
+  <div class="sec-inner">
+    <div class="contact-grid">
       <div>
         <div class="reveal">
-          <span class="section-label">// Contato</span>
-          <h2>Vamos colocar seu negócio no <em>digital</em>?</h2>
-          <div class="divider"></div>
-          <p style="color:var(--muted);margin-bottom:2rem;line-height:1.7">Manda uma mensagem. Resposta em até 24h, orçamento sem compromisso.</p>
+          <div class="sec-label">Contato</div>
+          <h2 class="sec-h">Vamos colocar seu negócio<br>no <em>digital</em>?</h2>
+          <div class="sep"></div>
+          <p style="color:rgba(240,244,255,.45);line-height:1.75;margin-bottom:2.5rem">Manda uma mensagem. Resposta em até 24h e orçamento sem compromisso.</p>
         </div>
-        <div class="contact-item reveal reveal-delay-1">📱 <span><strong>WhatsApp:</strong> <a href="https://wa.me/5551989006644" target="_blank">+55 (51) 9 8900-6644</a></span></div>
-        <div class="contact-item reveal reveal-delay-2">📧 <span><strong>Email:</strong> <a href="mailto:orbit.digital.bussiness@gmail.com">orbit.digital.bussiness@gmail.com</a></span></div>
-        <div class="contact-item reveal reveal-delay-3">📸 <span><strong>Instagram:</strong> <a href="https://instagram.com/orbit.digital.bussiness" target="_blank">@orbit.digital.bussiness</a></span></div>
-        <div class="contact-item reveal reveal-delay-4">📍 <span><strong>Localização:</strong> Canoas, RS — Brasil & EUA</span></div>
+        <div class="c-link reveal delay-1"><div class="c-icon">📱</div><span><strong>WhatsApp</strong><br><a href="https://wa.me/5551989006644" target="_blank">+55 (51) 9 8900-6644</a></span></div>
+        <div class="c-link reveal delay-2"><div class="c-icon">📧</div><span><strong>Email</strong><br><a href="mailto:orbit.digital.bussiness@gmail.com">orbit.digital.bussiness@gmail.com</a></span></div>
+        <div class="c-link reveal delay-3"><div class="c-icon">📸</div><span><strong>Instagram</strong><br><a href="https://instagram.com/orbit.digital.bussiness" target="_blank">@orbit.digital.bussiness</a></span></div>
+        <div class="c-link reveal delay-4"><div class="c-icon">📍</div><span><strong>Localização</strong><br>Canoas, RS — Brasil & EUA</span></div>
       </div>
-      <div class="reveal reveal-delay-2">
+      <div class="reveal delay-2">
         <form class="cform" action="https://formsubmit.co/orbit.digital.bussiness@gmail.com" method="POST">
           <input type="hidden" name="_subject" value="🪐 Novo contato — Órbita Digital">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="https://mellow-frangollo-f0aa8b.netlify.app">
-          <div class="fgroup"><label>Nome</label><input type="text" name="nome" required placeholder="Seu nome"></div>
-          <div class="fgroup"><label>Email ou WhatsApp</label><input type="text" name="contato" required placeholder="seu@email.com ou +55..."></div>
-          <div class="fgroup">
+          <div class="fg"><label>Nome</label><input type="text" name="nome" required placeholder="Seu nome"></div>
+          <div class="fg"><label>Email ou WhatsApp</label><input type="text" name="contato" required placeholder="seu@email.com ou +55..."></div>
+          <div class="fg">
             <label>Serviço de interesse</label>
             <select name="servico">
               <option value="">Selecione...</option>
@@ -737,8 +915,10 @@ footer{
               <option>⭐ Plano completo</option>
             </select>
           </div>
-          <div class="fgroup"><label>Mensagem</label><textarea name="mensagem" placeholder="Conta sobre o seu negócio e o que você precisa..."></textarea></div>
-          <button type="submit" class="fsubmit">Enviar mensagem →</button>
+          <div class="fg"><label>Mensagem</label><textarea name="mensagem" placeholder="Conta sobre o seu negócio e o que você precisa..."></textarea></div>
+          <button type="submit" class="f-submit">Enviar mensagem →</button>
+          <div class="f-or">ou</div>
+          <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20%C3%93rbita%20Digital." target="_blank" class="f-wa">💬 Falar direto no WhatsApp</a>
         </form>
       </div>
     </div>
@@ -746,91 +926,138 @@ footer{
 </section>
 
 <footer>
-  <div class="footer-logo">🪐 Órbita Digital</div>
-  <div class="footer-sub">Presença digital para pequenos negócios — Brasil & EUA</div>
-  <div class="footer-links">
-    <a href="#servicos">Serviços</a>
-    <a href="#processo">Como funciona</a>
-    <a href="#precos">Preços</a>
-    <a href="#contato">Contato</a>
-    <a href="https://instagram.com/orbit.digital.bussiness" target="_blank">Instagram</a>
+  <div class="foot-inner">
+    <div class="foot-logo">🪐 Órbita Digital</div>
+    <nav class="foot-links">
+      <a href="#servicos">Serviços</a>
+      <a href="#processo">Processo</a>
+      <a href="#precos">Preços</a>
+      <a href="#contato">Contato</a>
+      <a href="https://instagram.com/orbit.digital.bussiness" target="_blank">Instagram</a>
+    </nav>
+    <div class="foot-copy">© 2025 Órbita Digital. Todos os direitos reservados. Brasil & EUA.</div>
   </div>
-  <div class="footer-copy">© 2025 Órbita Digital. Todos os direitos reservados.</div>
 </footer>
 
 <script>
-// ── PARTÍCULAS ──
-function createParticles(containerId, count){
-  const c = document.getElementById(containerId);
-  if(!c) return;
-  for(let i=0;i<count;i++){
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random()*2+.5;
-    p.style.cssText = `
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      --dur:${Math.random()*4+2}s;
-      --delay:${Math.random()*4}s;
-      --min-o:${Math.random()*.15+.05};
-      --max-o:${Math.random()*.6+.2};
-    `;
-    c.appendChild(p);
+// ── CURSOR ──
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a,button,summary,.srv,.price-card,.scene-dot').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+
+// ── CANVAS PARTÍCULAS ──
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,stars=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+function initStars(){
+  stars=[];
+  for(let i=0;i<180;i++){
+    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,o:Math.random()*.6+.1,s:Math.random()*.004+.001,vx:(Math.random()-.5)*.05,vy:(Math.random()-.5)*.05});
   }
 }
-createParticles('particles-0', 120);
+function drawStars(){
+  ctx.clearRect(0,0,W,H);
+  stars.forEach(s=>{
+    s.o+=s.s*(Math.random()>.5?1:-1);
+    s.o=Math.max(.05,Math.min(.8,s.o));
+    s.x+=s.vx;s.y+=s.vy;
+    if(s.x<0)s.x=W;if(s.x>W)s.x=0;
+    if(s.y<0)s.y=H;if(s.y>H)s.y=0;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.o})`;ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize',()=>{resize();initStars()});
+resize();initStars();drawStars();
 
-// ── SCROLL JOURNEY ──
-const scenes = document.querySelectorAll('.scene');
-const journey = document.getElementById('journey');
-const progressBar = document.getElementById('progress-bar');
-const scrollHint = document.getElementById('scroll-hint');
-const totalScenes = scenes.length;
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
+},{passive:true});
+
+// ── JOURNEY SCROLL ──
+const journey=document.getElementById('journey');
+const scenes=document.querySelectorAll('.scene');
+const dots=document.querySelectorAll('.scene-dot');
+const hint=document.getElementById('scroll-hint');
+const prog=document.getElementById('progress');
+const N=scenes.length;
+let currentScene=-1;
+
+// Stagger para palavras do headline
+function animWords(scene){
+  scene.querySelectorAll('.scene-headline .word').forEach((w,i)=>{
+    w.style.transitionDelay=`${.05+i*.07}s`;
+  });
+}
+scenes.forEach(s=>animWords(s));
 
 function updateJourney(){
-  const journeyRect = journey.getBoundingClientRect();
-  const journeyHeight = journey.offsetHeight - window.innerHeight;
-  const scrolled = Math.max(0, -journeyRect.top);
-  const progress = Math.min(1, scrolled / journeyHeight);
+  const rect=journey.getBoundingClientRect();
+  const total=journey.offsetHeight-window.innerHeight;
+  const scrolled=Math.max(0,-rect.top);
+  const pct=Math.min(1,scrolled/total);
 
-  // Progresso geral da página
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pageProgress = window.scrollY / docHeight;
-  progressBar.style.width = (pageProgress * 100) + '%';
+  // Progresso global
+  const docH=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(window.scrollY/docH*100)+'%';
 
-  // Qual cena mostrar
-  const sceneIndex = Math.min(totalScenes - 1, Math.floor(progress * totalScenes));
+  const idx=Math.min(N-1,Math.floor(pct*N));
+  if(idx!==currentScene){
+    currentScene=idx;
+    scenes.forEach((s,i)=>{
+      const active=i===idx;
+      s.classList.toggle('active',active);
+    });
+    dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+  }
 
-  scenes.forEach((s, i) => {
-    s.classList.toggle('active', i === sceneIndex);
-  });
+  // Parallax interno: move o world dentro da cena ativa
+  const sceneProgress=(pct*N)%1; // 0→1 dentro da cena atual
+  const activeScene=document.querySelector('.scene.active');
+  if(activeScene){
+    const world=activeScene.querySelector('.scene-world');
+    if(world){
+      const tx=(sceneProgress-.5)*30;
+      const ty=(sceneProgress-.5)*20;
+      world.style.transform=`translate(${tx}px,${ty}px) scale(1.05)`;
+    }
+  }
 
-  // Esconder hint de scroll após primeira cena
-  if(scrollHint) scrollHint.style.opacity = scrolled > 50 ? '0' : '.6';
+  hint.classList.toggle('hidden',scrolled>80);
 }
 
-window.addEventListener('scroll', updateJourney, {passive:true});
+window.addEventListener('scroll',updateJourney,{passive:true});
 updateJourney();
 
 // ── REVEAL AO SCROLL ──
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if(e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
-  });
-}, {threshold:.15});
-reveals.forEach(el => observer.observe(el));
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');observer.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
 // ── SMOOTH SCROLL ──
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
     e.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if(t) t.scrollIntoView({behavior:'smooth'});
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth'});
   });
 });
 </script>
