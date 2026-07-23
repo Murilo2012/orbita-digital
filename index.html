@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Órbita Digital — Presença digital para pequenos negócios</title>
+<meta name="description" content="Sites, design gráfico, automação e edição de vídeo para pequenos negócios no Brasil e nos EUA. Orçamento grátis em até 24h.">
+<meta property="og:title" content="Órbita Digital — Presença digital para pequenos negócios">
+<meta property="og:description" content="Sites, design e automação para quem não tem tempo para isso. Brasil e EUA.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='10' fill='%236366f1'/%3E%3Cellipse cx='50' cy='50' rx='44' ry='17' fill='none' stroke='%23f59e0b' stroke-width='3' transform='rotate(-25 50 50)'/%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#05061a;--navy2:#0d1030;--accent:#6366f1;--accent2:#818cf8;
+  --gold:#f59e0b;--white:#f8fafc;--muted:#94a3b8;--dim:#475569;
+  --radius:12px;--max:1100px
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden}
+
+/* GLOW BG */
+body::before{content:'';position:fixed;top:-20%;right:-10%;width:600px;height:600px;
+background:radial-gradient(circle,rgba(99,102,241,.15) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-20%;left:-10%;width:500px;height:500px;
+background:radial-gradient(circle,rgba(245,158,11,.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;
+display:flex;align-items:center;justify-content:space-between;
+background:rgba(5,6,26,.85);backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(99,102,241,.15)}
+.nav-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.15rem;text-decoration:none;color:var(--white)}
+.nav-logo svg{width:32px;height:32px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:var(--accent);color:#fff;padding:.5rem 1.2rem;border-radius:8px;
+text-decoration:none;font-size:.9rem;font-weight:600;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+.lang-switch{display:flex;gap:.4rem}
+.lang-switch button{background:none;border:1px solid rgba(255,255,255,.15);color:var(--muted);
+padding:.25rem .6rem;border-radius:6px;cursor:pointer;font-size:.8rem;transition:all .2s}
+.lang-switch button.active,.lang-switch button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;
+text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+.hero-orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+width:700px;height:700px;pointer-events:none}
+.hero-orbit ellipse{animation:spin 18s linear infinite}
+.hero-orbit ellipse:nth-child(2){animation-duration:28s;animation-direction:reverse}
+.hero-orbit ellipse:nth-child(3){animation-duration:12s}
+@keyframes spin{from{transform:rotate(0deg) translateX(0)}to{transform:rotate(360deg) translateX(0)}}
+.orbit-ring{transform-origin:350px 350px}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(99,102,241,.12);
+border:1px solid rgba(99,102,241,.3);color:var(--accent2);padding:.4rem 1rem;
+border-radius:20px;font-size:.85rem;margin-bottom:1.5rem}
+.hero-tag span{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem}
+h1 em{font-style:normal;color:var(--accent2)}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:560px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#fff;padding:.85rem 2rem;border-radius:var(--radius);
+text-decoration:none;font-weight:700;font-size:1rem;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:var(--white);padding:.85rem 2rem;border-radius:var(--radius);
+text-decoration:none;font-weight:600;font-size:1rem;border:1px solid rgba(255,255,255,.2);transition:all .2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent2)}
+.hero-flags{margin-top:2rem;color:var(--dim);font-size:.85rem}
+
+/* STATS */
+.stats{padding:3rem 2rem;border-top:1px solid rgba(99,102,241,.1);
+border-bottom:1px solid rgba(99,102,241,.1)}
+.stats-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;text-align:center}
+.stat-num{font-size:2.4rem;font-weight:800;color:var(--accent2)}
+.stat-label{color:var(--muted);font-size:.9rem;margin-top:.2rem}
+
+/* SECTION BASE */
+section{padding:5rem 2rem;position:relative}
+.container{max-width:var(--max);margin:0 auto}
+.section-tag{display:inline-block;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);
+color:var(--accent2);padding:.3rem .8rem;border-radius:6px;font-size:.78rem;
+font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+h2 em{font-style:normal;color:var(--gold)}
+.section-sub{color:var(--muted);max-width:540px;font-size:1.05rem;margin-bottom:3rem}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+.service-card{background:rgba(13,16,48,.7);border:1px solid rgba(99,102,241,.15);
+border-radius:var(--radius);padding:2rem;transition:all .3s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,102,241,.05),transparent);opacity:0;transition:.3s}
+.service-card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-4px)}
+.service-card:hover::before{opacity:1}
+.service-icon{font-size:2rem;margin-bottom:1rem}
+.service-card h3{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;color:var(--white)}
+.service-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+.service-tag{display:inline-block;margin-top:.8rem;font-size:.75rem;color:var(--accent2);
+background:rgba(99,102,241,.1);padding:.2rem .6rem;border-radius:4px}
+
+/* PROCESS */
+.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;margin-top:1rem}
+.step{position:relative;padding-left:1rem}
+.step-num{font-size:3rem;font-weight:800;color:rgba(99,102,241,.2);line-height:1;margin-bottom:.5rem}
+.step h3{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.step p{color:var(--muted);font-size:.88rem}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.price-card{background:rgba(13,16,48,.7);border:1px solid rgba(99,102,241,.15);
+border-radius:var(--radius);padding:2rem;position:relative}
+.price-card.featured{border-color:var(--accent);background:rgba(99,102,241,.08)}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+background:var(--accent);color:#fff;padding:.25rem .8rem;border-radius:12px;font-size:.75rem;font-weight:700;white-space:nowrap}
+.price-name{font-size:1rem;font-weight:600;color:var(--muted);margin-bottom:.5rem}
+.price-value{font-size:2.2rem;font-weight:800;color:var(--white);margin-bottom:.2rem}
+.price-value span{font-size:1rem;font-weight:400;color:var(--muted)}
+.price-desc{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
+.price-features li{font-size:.88rem;color:var(--muted);display:flex;align-items:flex-start;gap:.5rem}
+.price-features li::before{content:"✓";color:var(--accent2);font-weight:700;flex-shrink:0}
+.price-btn{display:block;text-align:center;padding:.7rem;border-radius:8px;
+text-decoration:none;font-weight:600;font-size:.9rem;transition:all .2s}
+.price-card.featured .price-btn{background:var(--accent);color:#fff}
+.price-card.featured .price-btn:hover{background:var(--accent2)}
+.price-card:not(.featured) .price-btn{border:1px solid rgba(99,102,241,.3);color:var(--accent2)}
+.price-card:not(.featured) .price-btn:hover{background:rgba(99,102,241,.1)}
+
+/* FAQ */
+.faq-list{max-width:700px}
+details{border-bottom:1px solid rgba(99,102,241,.1);padding:1.2rem 0}
+summary{cursor:pointer;font-weight:600;font-size:1rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::after{content:"+";color:var(--accent);font-size:1.3rem;transition:.2s}
+details[open] summary::after{content:"−"}
+details p{color:var(--muted);font-size:.9rem;margin-top:.8rem;line-height:1.7}
+
+/* CONTACT */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+@media(max-width:700px){.contact-wrap{grid-template-columns:1fr}}
+.contact-info h2{margin-bottom:1rem}
+.contact-info p{color:var(--muted);margin-bottom:2rem}
+.contact-item{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;color:var(--muted);font-size:.95rem}
+.contact-item strong{color:var(--white)}
+.contact-form{background:rgba(13,16,48,.7);border:1px solid rgba(99,102,241,.15);border-radius:var(--radius);padding:2rem}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:.4rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(255,255,255,.05);
+border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:.7rem 1rem;
+color:var(--white);font-size:.95rem;font-family:inherit;transition:.2s;outline:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{height:120px;resize:vertical}
+.form-group select option{background:#0d1030}
+.form-submit{width:100%;background:var(--accent);color:#fff;border:none;padding:.85rem;
+border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s}
+.form-submit:hover{background:var(--accent2)}
+
+/* FOOTER */
+footer{padding:3rem 2rem;border-top:1px solid rgba(99,102,241,.1);text-align:center}
+.footer-logo{font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:.5rem}
+.footer-sub{color:var(--dim);font-size:.85rem;margin-bottom:1.5rem}
+.footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.footer-links a{color:var(--dim);text-decoration:none;font-size:.85rem;transition:.2s}
+.footer-links a:hover{color:var(--accent2)}
+.footer-copy{color:var(--dim);font-size:.8rem;margin-top:1.5rem}
+
+/* MOBILE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero-orbit{width:400px;height:400px}
+  .hero-orbit ellipse{display:none}
+  .contact-wrap{gap:2rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="10" fill="#6366f1"/>
+      <ellipse cx="50" cy="50" rx="44" ry="17" fill="none" stroke="#f59e0b" stroke-width="2.5" transform="rotate(-25 50 50)"/>
+      <ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#6366f1" stroke-width="1.5" transform="rotate(20 50 50)"/>
+      <circle cx="90" cy="42" r="4" fill="#f59e0b"/>
+    </svg>
+    Órbita Digital
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicos" data-i18n="navServices">Serviços</a></li>
+    <li><a href="#processo" data-i18n="navProcess">Como funciona</a></li>
+    <li><a href="#precos" data-i18n="navPricing">Preços</a></li>
+    <li><a href="#contato" data-i18n="navContact">Contato</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <div class="lang-switch">
+      <button data-lang="pt" class="active">PT</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="es">ES</button>
+    </div>
+    <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" class="nav-cta" data-i18n="navCta">Orçamento grátis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orbit" aria-hidden="true">
+    <svg viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg">
+      <ellipse class="orbit-ring" cx="350" cy="350" rx="320" ry="120" fill="none" stroke="rgba(99,102,241,0.12)" stroke-width="1" transform="rotate(-20 350 350)"/>
+      <ellipse class="orbit-ring" cx="350" cy="350" rx="260" ry="95" fill="none" stroke="rgba(245,158,11,0.1)" stroke-width="1" transform="rotate(15 350 350)"/>
+      <ellipse class="orbit-ring" cx="350" cy="350" rx="200" ry="70" fill="none" stroke="rgba(99,102,241,0.08)" stroke-width="1" transform="rotate(-40 350 350)"/>
+      <circle cx="350" cy="350" r="18" fill="rgba(99,102,241,0.3)"/>
+      <circle cx="350" cy="350" r="10" fill="#6366f1"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag"><span></span><span data-i18n="heroTag">Agência digital para pequenos negócios</span></div>
+    <h1 data-i18n="heroTitle">Sua empresa merece uma <em>presença digital</em> de verdade</h1>
+    <p class="hero-sub" data-i18n="heroSub">Sites, design gráfico, automação e vídeos curtos. Tudo 100% online, sem reunião presencial, sem complicação.</p>
+    <div class="hero-btns">
+      <a href="#contato" class="btn-primary" data-i18n="heroCta1">Orçamento grátis →</a>
+      <a href="https://wa.me/5551989006644" target="_blank" class="btn-secondary" data-i18n="heroCta2">💬 WhatsApp</a>
+    </div>
+    <p class="hero-flags" data-i18n="heroFlags">🇧🇷 Brasil &nbsp;·&nbsp; 🇺🇸 EUA &nbsp;·&nbsp; PT · EN · ES</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-num">24h</div><div class="stat-label" data-i18n="stat1">Orçamento em até 24h</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-label" data-i18n="stat2">Atendimento remoto</div></div>
+    <div><div class="stat-num">2</div><div class="stat-label" data-i18n="stat3">Países atendidos</div></div>
+    <div><div class="stat-num">4</div><div class="stat-label" data-i18n="stat4">Serviços disponíveis</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="servicos">
+  <div class="container">
+    <div class="section-tag" data-i18n="servicesTag">O QUE FAZEMOS</div>
+    <h2 data-i18n="servicesTitle">Tudo que seu negócio precisa, <em>em um lugar só</em></h2>
+    <p class="section-sub" data-i18n="servicesSub">Escolha um serviço ou combine todos em um plano personalizado.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🌐</div>
+        <h3 data-i18n="s1title">Site profissional</h3>
+        <p data-i18n="s1desc">Sites rápidos, responsivos e otimizados para o Google. Ideal para quem ainda não tem presença online ou quer atualizar o site antigo.</p>
+        <span class="service-tag" data-i18n="s1tag">Entrega rápida</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3 data-i18n="s2title">Design gráfico</h3>
+        <p data-i18n="s2desc">Posts para Instagram, logos, cardápios digitais e banners com identidade visual consistente para o seu negócio.</p>
+        <span class="service-tag" data-i18n="s2tag">Identidade visual</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3 data-i18n="s3title">Automação e social media</h3>
+        <p data-i18n="s3desc">Gestão das redes sociais e bots de atendimento no WhatsApp e Instagram para responder clientes automaticamente.</p>
+        <span class="service-tag" data-i18n="s3tag">Piloto automático</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎬</div>
+        <h3 data-i18n="s4title">Edição de vídeos curtos</h3>
+        <p data-i18n="s4desc">Cortes e edição para Reels, TikTok e Shorts — o formato que mais gera alcance orgânico para pequenos negócios hoje.</p>
+        <span class="service-tag" data-i18n="s4tag">Mais alcance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="processo" style="background:rgba(13,16,48,.4)">
+  <div class="container">
+    <div class="section-tag" data-i18n="processTag">COMO FUNCIONA</div>
+    <h2 data-i18n="processTitle">Do primeiro contato ao <em>resultado</em></h2>
+    <p class="section-sub" data-i18n="processSub">Um processo simples, feito para quem não tem tempo de acompanhar de perto.</p>
+    <div class="process-steps">
+      <div class="step"><div class="step-num">01</div><h3 data-i18n="p1title">Você conta o que precisa</h3><p data-i18n="p1desc">Manda uma mensagem pelo WhatsApp ou formulário. Sem reunião, sem burocracia.</p></div>
+      <div class="step"><div class="step-num">02</div><h3 data-i18n="p2title">Recebe o orçamento</h3><p data-i18n="p2desc">Em até 24h você recebe uma proposta clara com prazo e valor.</p></div>
+      <div class="step"><div class="step-num">03</div><h3 data-i18n="p3title">A gente executa</h3><p data-i18n="p3desc">Trabalhamos enquanto você foca no seu negócio. Atualizações por WhatsApp.</p></div>
+      <div class="step"><div class="step-num">04</div><h3 data-i18n="p4title">Você aprova e vai ao ar</h3><p data-i18n="p4desc">Revisões incluídas. Entregamos só quando você estiver satisfeito.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precos">
+  <div class="container">
+    <div class="section-tag" data-i18n="pricingTag">PREÇOS</div>
+    <h2 data-i18n="pricingTitle">Planos para cada <em>tamanho de negócio</em></h2>
+    <p class="section-sub" data-i18n="pricingSub">Preços em BRL para Brasil. Clientes nos EUA recebem proposta em USD.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name" data-i18n="plan1name">Presença</div>
+        <div class="price-value">R$ 497<span data-i18n="plan1period"> / único</span></div>
+        <div class="price-desc" data-i18n="plan1desc">Para quem precisa aparecer online o quanto antes.</div>
+        <ul class="price-features">
+          <li data-i18n="plan1f1">Site de 1 página (landing page)</li>
+          <li data-i18n="plan1f2">Domínio e hospedagem orientados</li>
+          <li data-i18n="plan1f3">Formulário de contato</li>
+          <li data-i18n="plan1f4">Otimizado para Google</li>
+          <li data-i18n="plan1f5">Entrega em até 5 dias</li>
+        </ul>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Presen%C3%A7a%20da%20%C3%93rbita%20Digital." target="_blank" class="price-btn" data-i18n="planCta">Quero esse plano →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge" data-i18n="planBadge">Mais popular</div>
+        <div class="price-name" data-i18n="plan2name">Crescimento</div>
+        <div class="price-value">R$ 997<span data-i18n="plan2period"> / mês</span></div>
+        <div class="price-desc" data-i18n="plan2desc">Site + gestão de redes sociais todo mês.</div>
+        <ul class="price-features">
+          <li data-i18n="plan2f1">Site completo com várias páginas</li>
+          <li data-i18n="plan2f2">12 posts/mês para Instagram</li>
+          <li data-i18n="plan2f3">Agendamento automático</li>
+          <li data-i18n="plan2f4">Relatório mensal de desempenho</li>
+          <li data-i18n="plan2f5">Suporte via WhatsApp</li>
+        </ul>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Crescimento%20da%20%C3%93rbita%20Digital." target="_blank" class="price-btn" data-i18n="planCta">Quero esse plano →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name" data-i18n="plan3name">Autoridade</div>
+        <div class="price-value">R$ 1.997<span data-i18n="plan3period"> / mês</span></div>
+        <div class="price-desc" data-i18n="plan3desc">Solução completa para dominar o digital.</div>
+        <ul class="price-features">
+          <li data-i18n="plan3f1">Tudo do plano Crescimento</li>
+          <li data-i18n="plan3f2">4 vídeos curtos editados/mês</li>
+          <li data-i18n="plan3f3">Bot de atendimento WhatsApp</li>
+          <li data-i18n="plan3f4">Design gráfico ilimitado</li>
+          <li data-i18n="plan3f5">Prioridade no suporte</li>
+        </ul>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Autoridade%20da%20%C3%93rbita%20Digital." target="_blank" class="price-btn" data-i18n="planCta">Quero esse plano →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:rgba(13,16,48,.4)">
+  <div class="container">
+    <div class="section-tag" data-i18n="faqTag">DÚVIDAS</div>
+    <h2 data-i18n="faqTitle">Perguntas <em>frequentes</em></h2>
+    <div class="faq-list">
+      <details><summary data-i18n="faq1q">Preciso ir a algum lugar para contratar?</summary><p data-i18n="faq1a">Não. Todo o atendimento é feito por WhatsApp, e-mail ou chamada online quando necessário. Atendemos Brasil e EUA 100% de forma remota.</p></details>
+      <details><summary data-i18n="faq2q">Como é feito o pagamento?</summary><p data-i18n="faq2a">Clientes no Brasil podem pagar por Pix ou cartão. Clientes nos EUA pagam por Wise, PayPal ou cartão internacional.</p></details>
+      <details><summary data-i18n="faq3q">Quanto tempo leva para entregar?</summary><p data-i18n="faq3a">Depende do escopo — um site simples fica pronto em até 5 dias após a aprovação do conteúdo. Projetos maiores têm prazo combinado.</p></details>
+      <details><summary data-i18n="faq4q">Posso contratar apenas um serviço?</summary><p data-i18n="faq4a">Sim! Cada serviço pode ser contratado separadamente ou combinado em um plano personalizado conforme sua necessidade.</p></details>
+      <details><summary data-i18n="faq5q">Vocês atendem qualquer tipo de negócio?</summary><p data-i18n="faq5a">Atendemos pequenos negócios de todos os setores — restaurantes, clínicas, lojas, prestadores de serviço, profissionais liberais e mais.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contato">
+  <div class="container">
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <div class="section-tag" data-i18n="contactTag">CONTATO</div>
+        <h2 data-i18n="contactTitle">Vamos colocar seu negócio no <em>digital</em>?</h2>
+        <p data-i18n="contactSub">Manda uma mensagem contando o que você precisa. Resposta em até 24h e orçamento sem compromisso.</p>
+        <div class="contact-item">📱 <span><strong>WhatsApp:</strong> <a href="https://wa.me/5551989006644" style="color:var(--accent2);text-decoration:none">+55 (51) 9 8900-6644</a></span></div>
+        <div class="contact-item">📧 <span><strong>Email:</strong> <a href="mailto:orbit.digital.bussiness@gmail.com" style="color:var(--accent2);text-decoration:none">orbit.digital.bussiness@gmail.com</a></span></div>
+        <div class="contact-item">📸 <span><strong>Instagram:</strong> <a href="https://instagram.com/orbit.digital.bussiness" target="_blank" style="color:var(--accent2);text-decoration:none">@orbit.digital.bussiness</a></span></div>
+        <div class="contact-item">📍 <span><strong>Localização:</strong> Canoas, RS — Brasil &amp; EUA</span></div>
+        <div class="contact-item">🕐 <span><strong>Resposta:</strong> <span data-i18n="contactTime">Em até 24 horas</span></span></div>
+      </div>
+      <div>
+        <form class="contact-form" action="https://formsubmit.co/orbit.digital.bussiness@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="🪐 Novo contato pelo site — Órbita Digital">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://mellow-frangollo-f0aa8b.netlify.app">
+          <input type="hidden" name="_template" value="table">
+          <div class="form-group">
+            <label data-i18n="formName">Nome</label>
+            <input type="text" name="nome" required placeholder="Seu nome">
+          </div>
+          <div class="form-group">
+            <label data-i18n="formContact">Email ou WhatsApp</label>
+            <input type="text" name="contato" required placeholder="seu@email.com ou +55...">
+          </div>
+          <div class="form-group">
+            <label data-i18n="formService">Serviço de interesse</label>
+            <select name="servico">
+              <option data-i18n="formOpt0">Selecione...</option>
+              <option data-i18n="formOpt1">Site profissional</option>
+              <option data-i18n="formOpt2">Design gráfico</option>
+              <option data-i18n="formOpt3">Automação e social media</option>
+              <option data-i18n="formOpt4">Edição de vídeos</option>
+              <option data-i18n="formOpt5">Plano completo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="formMsg">Mensagem</label>
+            <textarea name="mensagem" placeholder="Conta um pouco sobre o seu negócio e o que você precisa..."></textarea>
+          </div>
+          <button type="submit" class="form-submit" data-i18n="formSubmit">Enviar mensagem →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">🪐 Órbita Digital</div>
+  <div class="footer-sub" data-i18n="footerSub">Presença digital para pequenos negócios — Brasil &amp; EUA</div>
+  <div class="footer-links">
+    <a href="#servicos" data-i18n="navServices">Serviços</a>
+    <a href="#processo" data-i18n="navProcess">Como funciona</a>
+    <a href="#precos" data-i18n="navPricing">Preços</a>
+    <a href="#contato" data-i18n="navContact">Contato</a>
+  </div>
+  <div class="footer-copy">© 2025 Órbita Digital. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+const T={
+  en:{
+    navServices:"Services",navProcess:"How it works",navPricing:"Pricing",navContact:"Contact",navCta:"Free quote",
+    heroTag:"Digital agency for small businesses",
+    heroTitle:'Your business deserves a <em>real digital presence</em>',
+    heroSub:"Websites, graphic design, automation and short videos. 100% online, no in-person meetings.",
+    heroCta1:"Get a free quote →",heroCta2:"See services",heroFlags:"🇧🇷 Brazil · 🇺🇸 USA · PT · EN · ES",
+    stat1:"Quote in up to 24h",stat2:"100% remote service",stat3:"Countries served",stat4:"Services available",
+    servicesTag:"WHAT WE DO",servicesTitle:'Everything your business needs, <em>in one place</em>',servicesSub:"Choose one service or combine them all.",
+    s1title:"Professional website",s1desc:"Fast, mobile-ready websites optimized for Google.",s1tag:"Fast delivery",
+    s2title:"Graphic design",s2desc:"Instagram posts, logos, digital menus and banners.",s2tag:"Visual identity",
+    s3title:"Automation & social media",s3desc:"Social media management and chatbots for WhatsApp and Instagram.",s3tag:"Autopilot",
+    s4title:"Short video editing",s4desc:"Reels, TikTok and Shorts editing for maximum organic reach.",s4tag:"More reach",
+    processTag:"HOW IT WORKS",processTitle:'From first contact to <em>results</em>',processSub:"A simple process, made for busy entrepreneurs.",
+    p1title:"Tell us what you need",p1desc:"Send a message via WhatsApp or form. No meetings, no hassle.",
+    p2title:"Get your quote",p2desc:"Within 24h you'll receive a clear proposal with timeline and price.",
+    p3title:"We execute",p3desc:"We work while you focus on your business. Updates via WhatsApp.",
+    p4title:"You approve & go live",p4desc:"Revisions included. We deliver only when you're satisfied.",
+    pricingTag:"PRICING",pricingTitle:'Plans for every <em>business size</em>',pricingSub:"Prices in BRL for Brazil. US clients receive proposals in USD.",
+    plan1name:"Presence",plan1period:" / one-time",plan1desc:"For those who need to appear online fast.",
+    plan1f1:"1-page website (landing page)",plan1f2:"Domain & hosting guidance",plan1f3:"Contact form",plan1f4:"Google optimized",plan1f5:"Delivered in up to 5 days",
+    plan2name:"Growth",plan2period:" / month",plan2desc:"Website + social media management every month.",
+    plan2f1:"Full website with multiple pages",plan2f2:"12 posts/month for Instagram",plan2f3:"Automatic scheduling",plan2f4:"Monthly performance report",plan2f5:"WhatsApp support",
+    plan3name:"Authority",plan3period:" / month",plan3desc:"Complete solution to dominate the digital space.",
+    plan3f1:"Everything in Growth",plan3f2:"4 edited short videos/month",plan3f3:"WhatsApp chatbot",plan3f4:"Unlimited graphic design",plan3f5:"Priority support",
+    planBadge:"Most popular",planCta:"I want this plan →",
+    faqTag:"FAQ",faqTitle:'Frequently asked <em>questions</em>',
+    faq1q:"Do I need to go anywhere to hire?",faq1a:"No. Everything is done via WhatsApp, email or online call when needed. We serve Brazil and USA 100% remotely.",
+    faq2q:"How is payment done?",faq2a:"Brazil clients pay via Pix or card. US clients pay via Wise, PayPal or international card.",
+    faq3q:"How long does delivery take?",faq3a:"A simple website is ready in up to 5 days after content approval. Larger projects have an agreed timeline.",
+    faq4q:"Can I hire just one service?",faq4a:"Yes! Each service can be hired separately or combined into a custom plan.",
+    faq5q:"Do you serve any type of business?",faq5a:"We serve small businesses of all kinds — restaurants, clinics, shops, service providers, freelancers and more.",
+    contactTag:"CONTACT",contactTitle:'Let's put your business <em>online</em>?',contactSub:"Send a message telling us what you need. Response within 24h, no commitment.",
+    contactTime:"Within 24 hours",formName:"Name",formContact:"Email or WhatsApp",formService:"Service of interest",
+    formOpt0:"Select...",formOpt1:"Professional website",formOpt2:"Graphic design",formOpt3:"Automation & social media",formOpt4:"Video editing",formOpt5:"Complete plan",
+    formMsg:"Message",formSubmit:"Send message →",
+    navServices2:"Services",footerSub:"Digital presence for small businesses — Brazil & USA"
+  },
+  es:{
+    navServices:"Servicios",navProcess:"Cómo funciona",navPricing:"Precios",navContact:"Contacto",navCta:"Presupuesto gratis",
+    heroTag:"Agencia digital para pequeños negocios",
+    heroTitle:'Tu negocio merece una <em>presencia digital</em> de verdad',
+    heroSub:"Sitios web, diseño, automatización y videos cortos. Todo 100% online, sin reuniones.",
+    heroCta1:"Presupuesto gratis →",heroCta2:"Ver servicios",heroFlags:"🇧🇷 Brasil · 🇺🇸 EE.UU. · PT · EN · ES",
+    stat1:"Presupuesto en 24h",stat2:"Atención 100% remota",stat3:"Países atendidos",stat4:"Servicios disponibles",
+    servicesTag:"QUÉ HACEMOS",servicesTitle:'Todo lo que tu negocio necesita, <em>en un solo lugar</em>',servicesSub:"Elige un servicio o combínalos todos.",
+    s1title:"Sitio web profesional",s1desc:"Sitios rápidos, responsivos y optimizados para Google.",s1tag:"Entrega rápida",
+    s2title:"Diseño gráfico",s2desc:"Posts para Instagram, logos, menús digitales y banners.",s2tag:"Identidad visual",
+    s3title:"Automatización y redes sociales",s3desc:"Gestión de redes y chatbots para WhatsApp e Instagram.",s3tag:"Piloto automático",
+    s4title:"Edición de videos cortos",s4desc:"Reels, TikTok y Shorts para máximo alcance orgánico.",s4tag:"Más alcance",
+    processTag:"CÓMO FUNCIONA",processTitle:'Del primer contacto al <em>resultado</em>',processSub:"Un proceso simple para emprendedores ocupados.",
+    p1title:"Cuéntanos qué necesitas",p1desc:"Manda un mensaje por WhatsApp o formulario.",
+    p2title:"Recibe tu presupuesto",p2desc:"En hasta 24h recibes una propuesta clara.",
+    p3title:"Nosotros ejecutamos",p3desc:"Trabajamos mientras tú te enfocas en tu negocio.",
+    p4title:"Apruebas y sale al aire",p4desc:"Revisiones incluidas. Entregamos cuando estés satisfecho.",
+    pricingTag:"PRECIOS",pricingTitle:'Planes para cada <em>tamaño de negocio</em>',pricingSub:"Precios en BRL para Brasil. Clientes en EE.UU. reciben propuesta en USD.",
+    plan1name:"Presencia",plan1period:" / único",plan1desc:"Para quienes necesitan aparecer online rápido.",
+    plan1f1:"Sitio de 1 página",plan1f2:"Orientación de dominio y hosting",plan1f3:"Formulario de contacto",plan1f4:"Optimizado para Google",plan1f5:"Entrega en hasta 5 días",
+    plan2name:"Crecimiento",plan2period:" / mes",plan2desc:"Sitio web + gestión de redes cada mes.",
+    plan2f1:"Sitio completo con varias páginas",plan2f2:"12 posts/mes para Instagram",plan2f3:"Publicación automática",plan2f4:"Informe mensual de rendimiento",plan2f5:"Soporte por WhatsApp",
+    plan3name:"Autoridad",plan3period:" / mes",plan3desc:"Solución completa para dominar el digital.",
+    plan3f1:"Todo del plan Crecimiento",plan3f2:"4 videos cortos editados/mes",plan3f3:"Chatbot WhatsApp",plan3f4:"Diseño gráfico ilimitado",plan3f5:"Soporte prioritario",
+    planBadge:"Más popular",planCta:"Quiero este plan →",
+    faqTag:"PREGUNTAS",faqTitle:'Preguntas <em>frecuentes</em>',
+    faq1q:"¿Necesito ir a algún lugar?",faq1a:"No. Todo se maneja por WhatsApp, email o llamada online.",
+    faq2q:"¿Cómo se realiza el pago?",faq2a:"Clientes en Brasil pagan por Pix o tarjeta. En EE.UU. por Wise, PayPal o tarjeta internacional.",
+    faq3q:"¿Cuánto tarda la entrega?",faq3a:"Un sitio simple suele estar listo en hasta 5 días tras aprobar el contenido.",
+    faq4q:"¿Puedo contratar solo un servicio?",faq4a:"Sí, cada servicio puede contratarse por separado.",
+    faq5q:"¿Atienden cualquier tipo de negocio?",faq5a:"Atendemos pequeños negocios de todos los sectores.",
+    contactTag:"CONTACTO",contactTitle:'¿Ponemos tu negocio <em>en línea</em>?',contactSub:"Manda un mensaje. Respuesta en hasta 24h, sin compromiso.",
+    contactTime:"En hasta 24 horas",formName:"Nombre",formContact:"Email o WhatsApp",formService:"Servicio de interés",
+    formOpt0:"Selecciona...",formOpt1:"Sitio web profesional",formOpt2:"Diseño gráfico",formOpt3:"Automatización y redes",formOpt4:"Edición de videos",formOpt5:"Plan completo",
+    formMsg:"Mensaje",formSubmit:"Enviar mensaje →",
+    footerSub:"Presencia digital para pequeños negocios — Brasil & EE.UU."
+  }
+};
+
+const orig={};
+document.querySelectorAll('[data-i18n]').forEach((el,i)=>{orig[i]=el.innerHTML});
+const els=Array.from(document.querySelectorAll('[data-i18n]'));
+
+function setLang(lang){
+  document.querySelectorAll('.lang-switch button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  document.documentElement.lang=lang==='pt'?'pt-BR':lang;
+  els.forEach((el,i)=>{
+    const k=el.getAttribute('data-i18n');
+    if(lang==='pt'){el.innerHTML=orig[i]}
+    else if(T[lang]&&T[lang][k]!==undefined){el.innerHTML=T[lang][k]}
+  });
+}
+document.querySelectorAll('.lang-switch button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
