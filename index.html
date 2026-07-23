@@ -367,36 +367,28 @@ footer{padding:3rem 2rem;border-top:1px solid rgba(99,102,241,.1);text-align:cen
         <div class="contact-item">🕐 <span><strong>Resposta:</strong> <span data-i18n="contactTime">Em até 24 horas</span></span></div>
       </div>
       <div>
-        <form class="contact-form" action="https://formsubmit.co/orbit.digital.bussiness@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="🪐 Novo contato pelo site — Órbita Digital">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://mellow-frangollo-f0aa8b.netlify.app">
-          <input type="hidden" name="_template" value="table">
+        <div class="contact-form">
           <div class="form-group">
-            <label data-i18n="formName">Nome</label>
-            <input type="text" name="nome" required placeholder="Seu nome">
+            <label>Nome</label>
+            <input type="text" id="f-nome" placeholder="Seu nome">
           </div>
           <div class="form-group">
-            <label data-i18n="formContact">Email ou WhatsApp</label>
-            <input type="text" name="contato" required placeholder="seu@email.com ou +55...">
-          </div>
-          <div class="form-group">
-            <label data-i18n="formService">Serviço de interesse</label>
-            <select name="servico">
-              <option data-i18n="formOpt0">Selecione...</option>
-              <option data-i18n="formOpt1">Site profissional</option>
-              <option data-i18n="formOpt2">Design gráfico</option>
-              <option data-i18n="formOpt3">Automação e social media</option>
-              <option data-i18n="formOpt4">Edição de vídeos</option>
-              <option data-i18n="formOpt5">Plano completo</option>
+            <label>Serviço de interesse</label>
+            <select id="f-servico">
+              <option value="">Selecione...</option>
+              <option value="Site profissional">🌐 Site profissional</option>
+              <option value="Design gráfico">🎨 Design gráfico</option>
+              <option value="Automação e social media">🤖 Automação e social media</option>
+              <option value="Edição de vídeos">🎬 Edição de vídeos</option>
+              <option value="Plano completo">⭐ Plano completo</option>
             </select>
           </div>
           <div class="form-group">
-            <label data-i18n="formMsg">Mensagem</label>
-            <textarea name="mensagem" placeholder="Conta um pouco sobre o seu negócio e o que você precisa..."></textarea>
+            <label>Mensagem</label>
+            <textarea id="f-msg" placeholder="Conta um pouco sobre o seu negócio e o que você precisa..."></textarea>
           </div>
-          <button type="submit" class="form-submit" data-i18n="formSubmit">Enviar mensagem →</button>
-        </form>
+          <button class="form-submit" onclick="enviarWhatsApp()">Enviar mensagem via WhatsApp →</button>
+        </div>
       </div>
     </div>
   </div>
