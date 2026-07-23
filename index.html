@@ -49,44 +49,54 @@ body:hover #cursor{opacity:1}
 /* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:1.2rem 2.5rem;
+  padding:0 2rem;
+  height:64px;
   display:flex;align-items:center;justify-content:space-between;
   background:rgba(4,5,26,0);
   transition:background .4s,backdrop-filter .4s,border-bottom .4s;
 }
 nav.scrolled{
-  background:rgba(4,5,26,.8);
+  background:rgba(4,5,26,.85);
   backdrop-filter:blur(24px);
   border-bottom:1px solid rgba(109,40,217,.15);
 }
 .nav-logo{
-  font-family:'Space Mono',monospace;font-size:.95rem;font-weight:700;
+  font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;
   color:#f0f4ff;text-decoration:none;
-  display:flex;align-items:center;gap:.7rem;
-  letter-spacing:-.02em;
+  display:flex;align-items:center;gap:.6rem;
+  letter-spacing:-.02em;flex-shrink:0;
+  cursor:pointer;
 }
 .logo-dot{
-  width:28px;height:28px;position:relative;
+  width:26px;height:26px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
 }
-.logo-dot svg{width:28px;height:28px}
-.nav-links{display:flex;gap:2.5rem;list-style:none}
+.logo-dot svg{width:26px;height:26px;display:block}
+.nav-links{
+  display:flex;gap:2rem;list-style:none;
+  margin:0;padding:0;
+}
 .nav-links a{
-  color:rgba(240,244,255,.55);text-decoration:none;
-  font-size:.82rem;font-weight:500;letter-spacing:.06em;
+  color:rgba(240,244,255,.5);text-decoration:none;
+  font-size:.78rem;font-weight:500;letter-spacing:.06em;
   text-transform:uppercase;transition:color .2s;
+  white-space:nowrap;cursor:pointer;
 }
 .nav-links a:hover{color:#f0f4ff}
 .nav-cta{
   background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;padding:.6rem 1.5rem;border-radius:50px;
-  text-decoration:none;font-size:.82rem;font-weight:600;
-  letter-spacing:.04em;transition:all .25s;
-  box-shadow:0 0 20px rgba(109,40,217,.3);
-  cursor:pointer;
+  color:#fff;padding:.5rem 1.2rem;border-radius:50px;
+  text-decoration:none;font-size:.78rem;font-weight:600;
+  letter-spacing:.03em;transition:all .25s;
+  box-shadow:0 0 16px rgba(109,40,217,.3);
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
 }
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(109,40,217,.5)}
-@media(max-width:768px){.nav-links{display:none}}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(109,40,217,.5)}
+@media(max-width:900px){
+  nav{padding:0 1.2rem}
+  .nav-links{display:none}
+  .nav-cta{font-size:.76rem;padding:.5rem 1rem}
+}
 
 /* ── SCROLL JOURNEY ── */
 #journey{position:relative;height:700vh}
