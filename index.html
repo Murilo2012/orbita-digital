@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto;cursor:none}
+html{scroll-behavior:auto}
 body{
   background:#04051a;color:#f0f4ff;
   font-family:'Space Grotesk',sans-serif;
@@ -83,7 +83,7 @@ nav.scrolled{
   text-decoration:none;font-size:.82rem;font-weight:600;
   letter-spacing:.04em;transition:all .25s;
   box-shadow:0 0 20px rgba(109,40,217,.3);
-  cursor:none;
+  cursor:pointer;
 }
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(109,40,217,.5)}
 @media(max-width:768px){.nav-links{display:none}}
@@ -145,8 +145,8 @@ nav.scrolled{
   overflow:hidden;
 }
 .scene-headline .word{
-  display:inline-block;margin-right:.25em;
-  opacity:0;transform:translateY(60px) rotate(3deg);
+  display:inline-block;margin-right:.25em;margin-bottom:.1em;
+  opacity:0;transform:translateY(50px);
   transition:opacity .6s cubic-bezier(.22,1,.36,1),
              transform .6s cubic-bezier(.22,1,.36,1);
 }
@@ -167,7 +167,7 @@ nav.scrolled{
   box-shadow:0 0 30px rgba(109,40,217,.4);
   opacity:0;transform:translateY(20px);
   transition:all .25s,opacity .6s .45s,transform .6s .45s;
-  cursor:none;
+  cursor:pointer;
 }
 .scene.active .scene-btn{opacity:1;transform:translateY(0)}
 .scene-btn:hover{transform:translateY(-3px)!important;box-shadow:0 0 50px rgba(109,40,217,.6)}
@@ -181,7 +181,7 @@ nav.scrolled{
 .scene-dot{
   width:4px;height:4px;border-radius:50%;
   background:rgba(255,255,255,.2);
-  transition:all .4s;cursor:none;
+  transition:all .4s;
 }
 .scene-dot.active{
   background:#8b5cf6;
@@ -314,7 +314,7 @@ h2.sec-h em{font-style:normal;color:#f59e0b}
 .p-btn{
   display:block;text-align:center;padding:.8rem;
   border-radius:50px;font-weight:600;font-size:.88rem;
-  text-decoration:none;transition:all .2s;cursor:none;border:none;
+  text-decoration:none;transition:all .2s;cursor:pointer;border:none;
   width:100%;font-family:'Space Grotesk',sans-serif;
 }
 .price-card.feat .p-btn{
@@ -331,7 +331,7 @@ h2.sec-h em{font-style:normal;color:#f59e0b}
 .faq-list{max-width:720px}
 details{border-bottom:1px solid rgba(255,255,255,.05);padding:1.4rem 0}
 summary{
-  cursor:none;font-weight:600;font-size:.95rem;letter-spacing:-.02em;
+  cursor:pointer;font-weight:600;font-size:.95rem;letter-spacing:-.02em;
   list-style:none;display:flex;justify-content:space-between;align-items:center;
   gap:1rem;color:#f0f4ff;
 }
@@ -374,7 +374,7 @@ details p{color:rgba(240,244,255,.5);font-size:.9rem;margin-top:1rem;line-height
   border-radius:12px;padding:.85rem 1.1rem;
   color:#f0f4ff;font-size:.92rem;
   font-family:'Space Grotesk',sans-serif;
-  outline:none;transition:.2s;cursor:none;
+  outline:none;transition:.2s;cursor:pointer;
   -webkit-appearance:none;
 }
 .fg input:focus,.fg textarea:focus,.fg select:focus{
@@ -386,7 +386,7 @@ details p{color:rgba(240,244,255,.5);font-size:.9rem;margin-top:1rem;line-height
 .f-submit{
   width:100%;background:linear-gradient(135deg,#6d28d9,#8b5cf6);
   color:#fff;border:none;padding:.9rem;border-radius:50px;
-  font-size:.95rem;font-weight:700;cursor:none;
+  font-size:.95rem;font-weight:700;cursor:pointer;
   font-family:'Space Grotesk',sans-serif;transition:all .25s;
   box-shadow:0 0 20px rgba(109,40,217,.25);
 }
@@ -397,7 +397,7 @@ details p{color:rgba(240,244,255,.5);font-size:.9rem;margin-top:1rem;line-height
   width:100%;padding:.8rem;border-radius:50px;
   border:1px solid rgba(109,40,217,.2);color:#8b5cf6;
   text-decoration:none;font-size:.88rem;font-weight:600;
-  transition:all .2s;cursor:none;
+  transition:all .2s;cursor:pointer;
 }
 .f-wa:hover{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.4)}
 
@@ -413,7 +413,7 @@ footer{
 }
 .foot-logo{font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;color:rgba(240,244,255,.6)}
 .foot-links{display:flex;gap:2.5rem;flex-wrap:wrap}
-.foot-links a{color:rgba(240,244,255,.3);text-decoration:none;font-size:.8rem;transition:.2s;cursor:none}
+.foot-links a{color:rgba(240,244,255,.3);text-decoration:none;font-size:.8rem;transition:.2s;cursor:pointer}
 .foot-links a:hover{color:rgba(240,244,255,.7)}
 .foot-copy{color:rgba(240,244,255,.2);font-size:.75rem;width:100%;text-align:center;margin-top:1rem}
 
@@ -558,7 +558,7 @@ footer{
           <span class="word">Sua</span>
           <span class="word">empresa</span>
           <span class="word">merece</span>
-          <span class="word">estar</span><br>
+          <span class="word">estar</span>
           <span class="word" style="color:#f59e0b">no</span>
           <span class="word" style="color:#f59e0b">digital</span>
           <span class="word">de</span>
