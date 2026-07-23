@@ -6,914 +6,838 @@
 <title>Órbita Digital — Agência Digital</title>
 <meta name="description" content="Sites, design, automação e vídeos para pequenos negócios no Brasil e EUA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+/* ── RESET ── */
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#04051a;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#f59e0b;
+  --white:#f0f4ff;
+  --muted:rgba(240,244,255,.45);
+  --border:rgba(109,40,217,.15);
+  --font:'Space Grotesk',sans-serif;
+  --mono:'Space Mono',monospace;
+}
 html{scroll-behavior:auto}
-body{padding-top:0}
 body{
-  background:#04051a;color:#f0f4ff;
-  font-family:'Space Grotesk',sans-serif;
+  background:var(--navy);
+  color:var(--white);
+  font-family:var(--font);
   overflow-x:hidden;
+  cursor:none;
 }
 
-/* ── CURSOR PERSONALIZADO ── */
-#cursor{
-  position:fixed;width:12px;height:12px;
-  background:#8b5cf6;border-radius:50%;
+/* ── CURSOR ── */
+#cur{
+  position:fixed;width:10px;height:10px;
+  background:var(--purple2);border-radius:50%;
   pointer-events:none;z-index:9999;
-  will-change:transform;
   transform:translate(-50%,-50%);
-  transition:width .2s,height .2s,background .2s;
-  mix-blend-mode:screen;
+  transition:background .2s,transform .15s;
 }
-#cursor-ring{
-  position:fixed;width:40px;height:40px;
-  border:1px solid rgba(139,92,246,.5);
+#cur-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(139,92,246,.4);
   border-radius:50%;pointer-events:none;z-index:9998;
-  will-change:transform;
   transform:translate(-50%,-50%);
-  transition:width .35s cubic-bezier(.22,1,.36,1),
-             height .35s cubic-bezier(.22,1,.36,1),
-             transform .08s linear,
+  transition:width .3s cubic-bezier(.22,1,.36,1),
+             height .3s cubic-bezier(.22,1,.36,1),
              border-color .2s;
 }
-body:hover #cursor{opacity:1}
-.cursor-hover #cursor{width:20px;height:20px;background:#f59e0b}
-.cursor-hover #cursor-ring{width:60px;height:60px;border-color:rgba(245,158,11,.4)}
+.hov #cur{background:var(--gold);transform:translate(-50%,-50%) scale(1.5)}
+.hov #cur-ring{width:54px;height:54px;border-color:rgba(245,158,11,.4)}
 
-/* ── BARRA DE PROGRESSO ── */
-#progress{
-  position:fixed;top:0;left:0;height:2px;z-index:200;
-  background:linear-gradient(90deg,#6d28d9,#f59e0b,#8b5cf6);
-  width:0%;transition:width .05s linear;
+/* ── BARRA PROGRESSO ── */
+#prog{
+  position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--gold));
+  z-index:9990;width:0;
+  pointer-events:none;
 }
 
 /* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:500;
-  pointer-events:all;
+#topnav{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:60px;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:0 2rem;
-  height:64px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(4,5,26,0);
-  transition:background .4s,backdrop-filter .4s,border-bottom .4s;
+  background:transparent;
+  transition:background .4s, border-bottom .4s;
 }
-nav.scrolled{
-  background:rgba(4,5,26,.85);
-  backdrop-filter:blur(24px);
-  border-bottom:1px solid rgba(109,40,217,.15);
+#topnav.solid{
+  background:rgba(4,5,26,.9);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-.nav-logo{
-  font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;
-  color:#f0f4ff;text-decoration:none;
-  display:flex;align-items:center;gap:.6rem;
-  letter-spacing:-.02em;flex-shrink:0;
-  cursor:pointer;
+.tnav-logo{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:var(--mono);font-size:.9rem;font-weight:700;
+  color:var(--white);text-decoration:none;
+  cursor:pointer;flex-shrink:0;
 }
-.logo-dot{
-  width:26px;height:26px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
+.tnav-logo svg{width:24px;height:24px;flex-shrink:0}
+.tnav-links{
+  display:flex;align-items:center;gap:2rem;
+  list-style:none;
 }
-.logo-dot svg{width:26px;height:26px;display:block}
-.nav-links{
-  display:flex;gap:2rem;list-style:none;
-  margin:0;padding:0;
+.tnav-links li a{
+  font-size:.78rem;font-weight:500;letter-spacing:.05em;
+  text-transform:uppercase;color:rgba(240,244,255,.5);
+  text-decoration:none;cursor:pointer;
+  transition:color .2s;white-space:nowrap;
 }
-.nav-links a{
-  color:rgba(240,244,255,.5);text-decoration:none;
-  font-size:.78rem;font-weight:500;letter-spacing:.06em;
-  text-transform:uppercase;transition:color .2s;
-  white-space:nowrap;cursor:pointer;
+.tnav-links li a:hover{color:var(--white)}
+.tnav-btn{
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;padding:.5rem 1.3rem;border-radius:50px;
+  text-decoration:none;font-size:.8rem;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:0 0 16px rgba(109,40,217,.35);
+  transition:box-shadow .2s,transform .2s;
 }
-.nav-links a:hover{color:#f0f4ff}
-.nav-cta{
-  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;padding:.5rem 1.2rem;border-radius:50px;
-  text-decoration:none;font-size:.78rem;font-weight:600;
-  letter-spacing:.03em;transition:all .25s;
-  box-shadow:0 0 16px rgba(109,40,217,.3);
-  cursor:pointer;white-space:nowrap;flex-shrink:0;
-  position:relative;z-index:501;
-  pointer-events:all;
+.tnav-btn:hover{
+  box-shadow:0 0 30px rgba(109,40,217,.6);
+  transform:translateY(-1px);
 }
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(109,40,217,.5)}
-@media(max-width:900px){
-  nav{padding:0 1.2rem}
-  .nav-links{display:none}
-  .nav-cta{font-size:.76rem;padding:.5rem 1rem}
+@media(max-width:860px){
+  .tnav-links{display:none}
+  #topnav{padding:0 1.2rem}
 }
 
-/* ── SCROLL JOURNEY ── */
-#journey{position:relative;height:700vh}
+/* ── CANVAS ESTRELAS ── */
+#bgc{
+  position:fixed;inset:0;
+  pointer-events:none;z-index:0;
+}
+
+/* ── JOURNEY SCROLL ── */
+#journey{position:relative;height:600vh}
 #sticky{
   position:sticky;top:0;height:100vh;overflow:hidden;
 }
 
-/* Canvas para WebGL-like com SVG animado */
-.scene{
+/* Cenas */
+.sc{
   position:absolute;inset:0;
   opacity:0;visibility:hidden;
-  transition:opacity .6s cubic-bezier(.22,1,.36,1);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1);
+  will-change:opacity;
 }
-.scene.active{opacity:1;visibility:visible}
+.sc.on{opacity:1;visibility:visible}
 
-/* Fundo de cada cena com movimento de câmera */
-.scene-world{
-  position:absolute;inset:-15%;
-  transition:transform 1.2s cubic-bezier(.22,1,.36,1);
+/* Fundo de cada cena */
+.sc-world{
+  position:absolute;
+  inset:-12%;
+  will-change:transform;
+  transition:transform 1.4s cubic-bezier(.22,1,.36,1);
 }
-.scene.active .scene-world{transform:scale(1.05)}
-.scene:not(.active) .scene-world{transform:scale(1.12)}
+.sc.on .sc-world{transform:scale(1.04) translate(0,0)}
+.sc:not(.on) .sc-world{transform:scale(1.1) translate(2%,1%)}
 
-/* Overlay gradiente */
-.scene-overlay{
+/* Overlay */
+.sc-ov{
   position:absolute;inset:0;z-index:2;
-  background:linear-gradient(
-    160deg,
-    rgba(4,5,26,.15) 0%,
-    rgba(4,5,26,.4) 40%,
-    rgba(4,5,26,.85) 100%
+  background:linear-gradient(155deg,
+    rgba(4,5,26,.1) 0%,
+    rgba(4,5,26,.45) 45%,
+    rgba(4,5,26,.88) 100%
   );
 }
 
-/* Conteúdo da cena */
-.scene-content{
-  position:absolute;z-index:10;
-  bottom:12%;left:8%;right:8%;
+/* Conteúdo */
+.sc-body{
+  position:absolute;bottom:11%;left:7%;right:7%;
+  z-index:10;
 }
-.scene-eyebrow{
-  font-family:'Space Mono',monospace;
-  font-size:.68rem;letter-spacing:.22em;
-  text-transform:uppercase;color:#8b5cf6;
-  margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;
-  opacity:0;transform:translateY(10px);
-  transition:opacity .5s .1s,transform .5s .1s;
+.sc-label{
+  font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--purple2);
+  display:flex;align-items:center;gap:.6rem;
+  margin-bottom:1rem;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s .05s, transform .5s .05s;
 }
-.scene.active .scene-eyebrow{opacity:1;transform:translateY(0)}
-.scene-eyebrow::before{
-  content:'';width:24px;height:1px;background:#8b5cf6;flex-shrink:0;
-}
-.scene-headline{
-  font-size:clamp(2.4rem,5.5vw,5rem);
-  font-weight:700;letter-spacing:-.04em;
-  line-height:1.0;margin-bottom:1.2rem;
-  overflow:hidden;
-}
-.scene-headline .word{
-  display:inline-block;margin-right:.25em;margin-bottom:.1em;
-  opacity:0;transform:translateY(50px);
-  transition:opacity .6s cubic-bezier(.22,1,.36,1),
-             transform .6s cubic-bezier(.22,1,.36,1);
-}
-.scene.active .scene-headline .word{opacity:1;transform:translateY(0) rotate(0)}
-.scene-headline em{font-style:normal;color:#f59e0b}
-.scene-sub{
-  font-size:1.05rem;color:rgba(240,244,255,.65);
-  max-width:520px;line-height:1.7;margin-bottom:2rem;
-  opacity:0;transform:translateY(20px);
-  transition:opacity .6s .3s,transform .6s .3s;
-}
-.scene.active .scene-sub{opacity:1;transform:translateY(0)}
-.scene-btn{
-  display:inline-flex;align-items:center;gap:.6rem;
-  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;padding:.85rem 2rem;border-radius:50px;
-  text-decoration:none;font-weight:600;font-size:.95rem;
-  box-shadow:0 0 30px rgba(109,40,217,.4);
-  opacity:0;transform:translateY(20px);
-  transition:all .25s,opacity .6s .45s,transform .6s .45s;
-  cursor:pointer;
-}
-.scene.active .scene-btn{opacity:1;transform:translateY(0)}
-.scene-btn:hover{transform:translateY(-3px)!important;box-shadow:0 0 50px rgba(109,40,217,.6)}
+.sc.on .sc-label{opacity:1;transform:none}
+.sc-label::before{content:'';width:20px;height:1px;background:var(--purple2)}
 
-/* Indicador de progresso de cenas */
-#scene-dots{
-  position:absolute;right:2.5rem;top:50%;
-  transform:translateY(-50%);z-index:10;
-  display:flex;flex-direction:column;gap:.6rem;
+.sc-title{
+  font-size:clamp(2.2rem,5.2vw,4.5rem);
+  font-weight:700;letter-spacing:-.04em;
+  line-height:1.0;margin-bottom:1.1rem;
 }
-.scene-dot{
-  width:4px;height:4px;border-radius:50%;
-  background:rgba(255,255,255,.2);
+.sc-title .w{
+  display:inline-block;margin-right:.22em;
+  opacity:0;transform:translateY(50px);
+  transition:opacity .55s cubic-bezier(.22,1,.36,1),
+             transform .55s cubic-bezier(.22,1,.36,1);
+}
+.sc.on .sc-title .w{opacity:1;transform:none}
+.sc-title em{font-style:normal;color:var(--gold)}
+
+.sc-sub{
+  font-size:1rem;color:var(--muted);
+  max-width:500px;line-height:1.7;margin-bottom:1.8rem;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s .3s, transform .5s .3s;
+}
+.sc.on .sc-sub{opacity:1;transform:none}
+
+.sc-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;padding:.8rem 1.8rem;border-radius:50px;
+  text-decoration:none;font-weight:600;font-size:.9rem;
+  box-shadow:0 0 24px rgba(109,40,217,.4);
+  cursor:pointer;
+  opacity:0;transform:translateY(16px);
+  transition:all .25s, opacity .5s .45s, transform .5s .45s;
+}
+.sc.on .sc-btn{opacity:1;transform:none}
+.sc-btn:hover{
+  box-shadow:0 0 44px rgba(109,40,217,.65);
+  transform:translateY(-2px)!important;
+}
+
+/* Número grande de fundo */
+.sc-num{
+  position:absolute;right:4%;bottom:6%;
+  font-family:var(--mono);
+  font-size:clamp(7rem,16vw,14rem);
+  font-weight:700;color:rgba(255,255,255,.022);
+  line-height:1;pointer-events:none;user-select:none;z-index:1;
+  letter-spacing:-.06em;
+}
+
+/* Dots laterais */
+#dots{
+  position:absolute;right:1.8rem;top:50%;
+  transform:translateY(-50%);
+  z-index:20;
+  display:flex;flex-direction:column;gap:.7rem;
+  pointer-events:none;
+}
+.dot{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(255,255,255,.18);
   transition:all .4s;
 }
-.scene-dot.active{
-  background:#8b5cf6;
-  box-shadow:0 0 8px rgba(139,92,246,.8);
-  transform:scale(1.5);
+.dot.on{
+  background:var(--purple2);
+  box-shadow:0 0 6px rgba(139,92,246,.9);
+  transform:scale(1.8);
 }
 
-/* Scroll hint animado */
-#scroll-hint{
-  position:absolute;bottom:5%;left:50%;
-  transform:translateX(-50%);z-index:20;
-  display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  transition:opacity .5s;
+/* Hint scroll */
+#hint{
+  position:absolute;bottom:4.5%;left:50%;
+  transform:translateX(-50%);
+  z-index:20;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  transition:opacity .4s;
 }
-#scroll-hint.hidden{opacity:0;pointer-events:none}
-.scroll-line{
-  width:1px;height:50px;
-  background:linear-gradient(to bottom,transparent,#8b5cf6);
-  animation:scrollLine 2s ease-in-out infinite;
+#hint.gone{opacity:0}
+.hint-line{
+  width:1px;height:44px;
+  background:linear-gradient(to bottom,transparent,var(--purple2));
+  animation:hl 2s ease-in-out infinite;
 }
-@keyframes scrollLine{
+@keyframes hl{
   0%{transform:scaleY(0);transform-origin:top}
   50%{transform:scaleY(1);transform-origin:top}
   51%{transform-origin:bottom}
   100%{transform:scaleY(0);transform-origin:bottom}
 }
-.scroll-text{
-  font-family:'Space Mono',monospace;
-  font-size:.62rem;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(255,255,255,.3);
-  writing-mode:vertical-rl;margin-top:.3rem;
+.hint-txt{
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.28);
+  writing-mode:vertical-rl;
 }
 
-/* Número da cena (grande, background) */
-.scene-number{
-  position:absolute;right:5%;bottom:8%;z-index:1;
-  font-family:'Space Mono',monospace;
-  font-size:clamp(8rem,18vw,16rem);
-  font-weight:700;letter-spacing:-.06em;
-  color:rgba(255,255,255,.025);
-  line-height:1;pointer-events:none;
-  transition:opacity .6s;
-  user-select:none;
-}
+/* ── SEÇÕES NORMAIS ── */
+.sec{padding:7rem 2rem;position:relative;overflow:hidden}
+.sec-inner{max-width:1080px;margin:0 auto}
+.sec-alt{background:rgba(6,7,26,.7)}
 
-/* ── SEÇÕES ── */
-section.sec{padding:8rem 2.5rem;position:relative;overflow:hidden}
-.sec-inner{max-width:1100px;margin:0 auto}
-.sec-label{
-  font-family:'Space Mono',monospace;
-  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
-  color:#8b5cf6;margin-bottom:1.2rem;
-  display:flex;align-items:center;gap:.8rem;
+.slabel{
+  font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--purple2);
+  display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;
 }
-.sec-label::before{content:'';width:30px;height:1px;background:#8b5cf6}
-h2.sec-h{
-  font-size:clamp(2rem,4vw,3.2rem);
+.slabel::before{content:'';width:28px;height:1px;background:var(--purple2)}
+h2.sh{
+  font-size:clamp(1.9rem,3.8vw,3rem);
   font-weight:700;letter-spacing:-.04em;line-height:1.05;
-  margin-bottom:1.2rem;
+  margin-bottom:1rem;
 }
-h2.sec-h em{font-style:normal;color:#f59e0b}
-.sec-sub{color:rgba(240,244,255,.5);font-size:1rem;max-width:480px;line-height:1.75;margin-bottom:4rem}
+h2.sh em{font-style:normal;color:var(--gold)}
+.ssub{color:var(--muted);font-size:.98rem;max-width:460px;line-height:1.75;margin-bottom:3.5rem}
+.sdiv{width:36px;height:1px;background:linear-gradient(90deg,var(--purple),transparent);margin-bottom:2.5rem}
 
 /* Grid serviços */
-.srv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;border:1px solid rgba(109,40,217,.1);border-radius:20px;overflow:hidden}
-.srv{
-  background:rgba(255,255,255,.025);
-  padding:2.5rem;transition:background .3s;
-  position:relative;overflow:hidden;
+.srvgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  border:1px solid var(--border);border-radius:16px;overflow:hidden;
 }
-.srv::before{
+.srv{
+  padding:2.2rem;
+  background:rgba(255,255,255,.02);
+  border-right:1px solid var(--border);
+  transition:background .3s;position:relative;overflow:hidden;
+}
+.srv:last-child{border-right:none}
+@media(max-width:768px){
+  .srvgrid{border-radius:12px}
+  .srv{border-right:none;border-bottom:1px solid var(--border)}
+  .srv:last-child{border-bottom:none}
+}
+.srv::after{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(109,40,217,.4),transparent);
+  background:linear-gradient(90deg,transparent,rgba(109,40,217,.5),transparent);
   opacity:0;transition:.3s;
 }
-.srv:hover{background:rgba(109,40,217,.06)}
-.srv:hover::before{opacity:1}
-.srv-num{
-  font-family:'Space Mono',monospace;font-size:.7rem;
-  color:rgba(139,92,246,.4);letter-spacing:.12em;margin-bottom:1.5rem;
-}
-.srv-icon{font-size:1.8rem;margin-bottom:1rem;display:block}
-.srv h3{font-size:1.05rem;font-weight:600;margin-bottom:.6rem;letter-spacing:-.02em}
-.srv p{color:rgba(240,244,255,.45);font-size:.88rem;line-height:1.65}
+.srv:hover{background:rgba(109,40,217,.05)}
+.srv:hover::after{opacity:1}
+.srv-n{font-family:var(--mono);font-size:.65rem;color:rgba(139,92,246,.35);letter-spacing:.1em;margin-bottom:1.2rem}
+.srv-i{font-size:1.7rem;margin-bottom:.9rem;display:block}
+.srv h3{font-size:1rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.02em}
+.srv p{color:var(--muted);font-size:.86rem;line-height:1.65}
 
 /* Processo */
-.proc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:3rem}
-.proc-step{position:relative}
+.procgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:2.5rem;
+}
 .proc-n{
-  font-family:'Space Mono',monospace;
-  font-size:5rem;font-weight:700;
-  color:rgba(109,40,217,.08);line-height:1;
-  margin-bottom:.5rem;
+  font-family:var(--mono);font-size:4.5rem;font-weight:700;
+  color:rgba(109,40,217,.08);line-height:1;margin-bottom:.6rem;
 }
-.proc-step h3{font-size:1rem;font-weight:600;margin-bottom:.5rem;color:#f0f4ff}
-.proc-step p{color:rgba(240,244,255,.45);font-size:.87rem;line-height:1.65}
-.proc-line{
-  position:absolute;top:2.5rem;left:100%;
-  width:100%;height:1px;
-  background:linear-gradient(90deg,rgba(109,40,217,.3),transparent);
-}
+.proc h3{font-size:.98rem;font-weight:600;margin-bottom:.4rem}
+.proc p{color:var(--muted);font-size:.85rem;line-height:1.65}
 
 /* Preços */
-.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem}
-.price-card{
-  border:1px solid rgba(109,40,217,.12);
-  border-radius:20px;padding:2.5rem;
-  background:rgba(255,255,255,.02);
+.pgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.2rem;
+}
+.pc{
+  border:1px solid var(--border);border-radius:16px;
+  padding:2.2rem;background:rgba(255,255,255,.02);
   position:relative;transition:border-color .3s,transform .3s;
 }
-.price-card:hover{border-color:rgba(109,40,217,.3);transform:translateY(-4px)}
-.price-card.feat{
+.pc:hover{border-color:rgba(109,40,217,.35);transform:translateY(-3px)}
+.pc.feat{
   border-color:rgba(109,40,217,.4);
-  background:rgba(109,40,217,.05);
+  background:rgba(109,40,217,.04);
 }
 .feat-tag{
   position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;padding:.3rem 1.2rem;border-radius:0 0 12px 12px;
-  font-size:.68rem;font-weight:700;font-family:'Space Mono',monospace;
-  letter-spacing:.08em;white-space:nowrap;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;padding:.25rem 1rem;border-radius:0 0 10px 10px;
+  font-size:.65rem;font-family:var(--mono);font-weight:700;
+  letter-spacing:.06em;white-space:nowrap;
 }
-.p-name{font-size:.78rem;color:rgba(240,244,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
-.p-val{font-size:2.4rem;font-weight:700;letter-spacing:-.05em;line-height:1;margin-bottom:.3rem}
-.p-val span{font-size:.95rem;font-weight:400;color:rgba(240,244,255,.4)}
-.p-desc{color:rgba(240,244,255,.4);font-size:.84rem;margin-bottom:1.8rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(109,40,217,.1)}
-.p-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
-.p-list li{font-size:.87rem;color:rgba(240,244,255,.55);display:flex;align-items:flex-start;gap:.6rem}
-.p-list li::before{content:'—';color:rgba(139,92,246,.5);flex-shrink:0;margin-top:.05em}
-.p-btn{
-  display:block;text-align:center;padding:.8rem;
-  border-radius:50px;font-weight:600;font-size:.88rem;
-  text-decoration:none;transition:all .2s;cursor:pointer;border:none;
-  width:100%;font-family:'Space Grotesk',sans-serif;
+.pc-name{font-size:.72rem;color:rgba(240,244,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.pc-val{font-size:2.2rem;font-weight:700;letter-spacing:-.05em;line-height:1;margin-bottom:.25rem}
+.pc-val span{font-size:.9rem;font-weight:400;color:var(--muted)}
+.pc-desc{color:var(--muted);font-size:.82rem;margin-bottom:1.5rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.8rem}
+.pc-list li{font-size:.85rem;color:var(--muted);display:flex;gap:.5rem;align-items:flex-start}
+.pc-list li::before{content:'—';color:rgba(139,92,246,.45);flex-shrink:0}
+.pbtn{
+  display:block;text-align:center;padding:.75rem;
+  border-radius:50px;font-weight:600;font-size:.86rem;
+  cursor:pointer;border:none;width:100%;
+  font-family:var(--font);transition:all .2s;
 }
-.price-card.feat .p-btn{
-  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;box-shadow:0 0 20px rgba(109,40,217,.3);
+.pc.feat .pbtn{
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;box-shadow:0 0 18px rgba(109,40,217,.3);
 }
-.price-card.feat .p-btn:hover{box-shadow:0 0 40px rgba(109,40,217,.5)}
-.price-card:not(.feat) .p-btn{
-  border:1px solid rgba(109,40,217,.25);color:#8b5cf6;background:transparent;
+.pc.feat .pbtn:hover{box-shadow:0 0 36px rgba(109,40,217,.55)}
+.pc:not(.feat) .pbtn{
+  background:transparent;color:var(--purple2);
+  border:1px solid rgba(109,40,217,.25);
 }
-.price-card:not(.feat) .p-btn:hover{background:rgba(109,40,217,.08)}
+.pc:not(.feat) .pbtn:hover{background:rgba(109,40,217,.08)}
 
 /* FAQ */
-.faq-list{max-width:720px}
-details{border-bottom:1px solid rgba(255,255,255,.05);padding:1.4rem 0}
-summary{
-  cursor:pointer;font-weight:600;font-size:.95rem;letter-spacing:-.02em;
-  list-style:none;display:flex;justify-content:space-between;align-items:center;
-  gap:1rem;color:#f0f4ff;
+.faq{max-width:700px}
+details{border-bottom:1px solid rgba(255,255,255,.05);padding:1.3rem 0}
+details summary{
+  cursor:pointer;font-weight:600;font-size:.93rem;letter-spacing:-.02em;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;
 }
-summary::after{
-  content:'+';color:#8b5cf6;font-size:1.4rem;
-  flex-shrink:0;font-family:'Space Mono',monospace;
-  transition:transform .3s;
+details summary::after{
+  content:'+';color:var(--purple2);font-size:1.3rem;
+  font-family:var(--mono);flex-shrink:0;
 }
 details[open] summary::after{content:'−'}
-details p{color:rgba(240,244,255,.5);font-size:.9rem;margin-top:1rem;line-height:1.75;max-width:600px}
+details p{color:var(--muted);font-size:.88rem;margin-top:.9rem;line-height:1.75;max-width:580px}
 
 /* Contato */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
-@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:3rem}}
-.c-info h2{margin-bottom:1rem}
-.c-info p{color:rgba(240,244,255,.5);line-height:1.75;margin-bottom:2.5rem}
-.c-link{
-  display:flex;align-items:center;gap:1rem;
-  margin-bottom:1.2rem;color:rgba(240,244,255,.55);font-size:.92rem;
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+@media(max-width:768px){.cgrid{grid-template-columns:1fr;gap:2.5rem}}
+.clink{
+  display:flex;align-items:center;gap:.9rem;
+  margin-bottom:1.1rem;color:var(--muted);font-size:.9rem;
 }
-.c-link a{color:#8b5cf6;text-decoration:none;transition:.2s}
-.c-link a:hover{color:#f0f4ff}
-.c-link strong{color:#f0f4ff}
-.c-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:rgba(109,40,217,.12);border:1px solid rgba(109,40,217,.2);
+.clink a{color:var(--purple2);text-decoration:none;transition:.2s;cursor:pointer}
+.clink a:hover{color:var(--white)}
+.clink strong{color:var(--white)}
+.cicon{
+  width:34px;height:34px;border-radius:9px;
+  background:rgba(109,40,217,.1);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;
+  font-size:.95rem;flex-shrink:0;
 }
 .cform{
   background:rgba(255,255,255,.025);
-  border:1px solid rgba(109,40,217,.12);
-  border-radius:20px;padding:2.5rem;
+  border:1px solid var(--border);
+  border-radius:16px;padding:2.2rem;
 }
-.fg{margin-bottom:1.4rem}
-.fg label{display:block;font-size:.75rem;color:rgba(240,244,255,.4);margin-bottom:.5rem;letter-spacing:.08em;text-transform:uppercase}
+.fg{margin-bottom:1.2rem}
+.fg label{
+  display:block;font-size:.72rem;color:rgba(240,244,255,.35);
+  margin-bottom:.45rem;letter-spacing:.07em;text-transform:uppercase;
+}
 .fg input,.fg textarea,.fg select{
   width:100%;background:rgba(255,255,255,.04);
-  border:1px solid rgba(109,40,217,.15);
-  border-radius:12px;padding:.85rem 1.1rem;
-  color:#f0f4ff;font-size:.92rem;
-  font-family:'Space Grotesk',sans-serif;
-  outline:none;transition:.2s;cursor:pointer;
-  -webkit-appearance:none;
+  border:1px solid var(--border);
+  border-radius:10px;padding:.8rem 1rem;
+  color:var(--white);font-size:.9rem;
+  font-family:var(--font);outline:none;transition:.2s;
+  cursor:pointer;-webkit-appearance:none;
 }
 .fg input:focus,.fg textarea:focus,.fg select:focus{
-  border-color:#8b5cf6;background:rgba(109,40,217,.05);
-  box-shadow:0 0 0 3px rgba(109,40,217,.12);
+  border-color:var(--purple2);
+  background:rgba(109,40,217,.05);
+  box-shadow:0 0 0 3px rgba(109,40,217,.1);
 }
-.fg textarea{height:130px;resize:vertical}
-.fg select option{background:#04051a}
-.f-submit{
-  width:100%;background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-  color:#fff;border:none;padding:.9rem;border-radius:50px;
-  font-size:.95rem;font-weight:700;cursor:pointer;
-  font-family:'Space Grotesk',sans-serif;transition:all .25s;
-  box-shadow:0 0 20px rgba(109,40,217,.25);
+.fg textarea{height:120px;resize:vertical}
+.fg select option{background:var(--navy)}
+.fsubmit{
+  width:100%;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;border:none;padding:.85rem;border-radius:50px;
+  font-size:.92rem;font-weight:700;cursor:pointer;
+  font-family:var(--font);transition:all .25s;
+  box-shadow:0 0 18px rgba(109,40,217,.25);
 }
-.f-submit:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(109,40,217,.4)}
-.f-or{text-align:center;color:rgba(240,244,255,.25);font-size:.8rem;margin:.8rem 0}
-.f-wa{
+.fsubmit:hover{box-shadow:0 0 36px rgba(109,40,217,.5);transform:translateY(-1px)}
+.for{
+  text-align:center;color:rgba(240,244,255,.22);
+  font-size:.78rem;margin:.7rem 0;
+}
+.fwa{
   display:flex;align-items:center;justify-content:center;gap:.5rem;
-  width:100%;padding:.8rem;border-radius:50px;
-  border:1px solid rgba(109,40,217,.2);color:#8b5cf6;
-  text-decoration:none;font-size:.88rem;font-weight:600;
+  width:100%;padding:.75rem;border-radius:50px;
+  border:1px solid var(--border);color:var(--purple2);
+  text-decoration:none;font-size:.86rem;font-weight:600;
   transition:all .2s;cursor:pointer;
 }
-.f-wa:hover{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.4)}
+.fwa:hover{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.35)}
 
 /* Footer */
 footer{
-  padding:4rem 2.5rem 3rem;
+  padding:3rem 2rem 2.5rem;
   border-top:1px solid rgba(255,255,255,.04);
 }
-.foot-inner{
-  max-width:1100px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:2rem;
+.finner{
+  max-width:1080px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1.5rem;
 }
-.foot-logo{font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;color:rgba(240,244,255,.6)}
-.foot-links{display:flex;gap:2.5rem;flex-wrap:wrap}
-.foot-links a{color:rgba(240,244,255,.3);text-decoration:none;font-size:.8rem;transition:.2s;cursor:pointer}
-.foot-links a:hover{color:rgba(240,244,255,.7)}
-.foot-copy{color:rgba(240,244,255,.2);font-size:.75rem;width:100%;text-align:center;margin-top:1rem}
-
-/* Fundo com partículas globais */
-#bg-canvas{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  top:0;
+.flogo{font-family:var(--mono);font-size:.88rem;font-weight:700;color:rgba(240,244,255,.5)}
+.flinks{display:flex;gap:2rem;flex-wrap:wrap}
+.flinks a{
+  color:rgba(240,244,255,.28);text-decoration:none;
+  font-size:.78rem;transition:.2s;cursor:pointer;
 }
-
-/* Linha de ruído animado horizontal */
-.noise-line{
-  position:absolute;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,
-    transparent 0%, rgba(109,40,217,.3) 30%,
-    rgba(139,92,246,.5) 50%,
-    rgba(109,40,217,.3) 70%,transparent 100%
-  );
-  animation:scanLine 8s ease-in-out infinite;
-  pointer-events:none;z-index:15;
-  opacity:.4;
-}
-@keyframes scanLine{
-  0%{top:-5%;opacity:0}
-  10%{opacity:.4}
-  90%{opacity:.4}
-  100%{top:105%;opacity:0}
+.flinks a:hover{color:rgba(240,244,255,.7)}
+.fcopy{
+  width:100%;text-align:center;
+  color:rgba(240,244,255,.18);font-size:.74rem;
+  margin-top:.5rem;
 }
 
-/* Reveal animation */
-.reveal{
-  opacity:0;transform:translateY(40px);
-  transition:opacity .8s cubic-bezier(.22,1,.36,1),
-             transform .8s cubic-bezier(.22,1,.36,1);
+/* Reveal */
+.rv{
+  opacity:0;transform:translateY(36px);
+  transition:opacity .75s cubic-bezier(.22,1,.36,1),
+             transform .75s cubic-bezier(.22,1,.36,1);
 }
-.reveal.in{opacity:1;transform:translateY(0)}
-.delay-1{transition-delay:.1s}
-.delay-2{transition-delay:.2s}
-.delay-3{transition-delay:.3s}
-.delay-4{transition-delay:.4s}
-
-/* Seção alternada */
-.sec-dark{background:rgba(6,7,28,.6)}
-
-/* Separador */
-.sep{width:40px;height:1px;background:linear-gradient(90deg,#6d28d9,transparent);margin-bottom:2.5rem}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}
+.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 </style>
 </head>
 <body>
 
 <!-- Cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<div id="cur"></div>
+<div id="cur-ring"></div>
 
-<!-- Barra progresso -->
-<div id="progress"></div>
+<!-- Progresso -->
+<div id="prog"></div>
 
-<!-- Canvas de partículas de fundo -->
-<canvas id="bg-canvas"></canvas>
+<!-- Canvas estrelas -->
+<canvas id="bgc"></canvas>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">
-    <div class="logo-dot">
-      <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="5" fill="#8b5cf6"/><ellipse cx="14" cy="14" rx="13" ry="5" fill="none" stroke="#f59e0b" stroke-width="1" transform="rotate(-20 14 14)" opacity=".7"/><ellipse cx="14" cy="14" rx="11" ry="4" fill="none" stroke="#8b5cf6" stroke-width="1" transform="rotate(15 14 14)" opacity=".5"/></svg>
-    </div>
+<!-- ── NAV ── -->
+<header id="topnav">
+  <a href="#" class="tnav-logo">
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4" fill="#8b5cf6"/>
+      <ellipse cx="12" cy="12" rx="11" ry="4.5" stroke="#f59e0b" stroke-width="1" transform="rotate(-20 12 12)" fill="none" opacity=".8"/>
+      <ellipse cx="12" cy="12" rx="9" ry="3.5" stroke="#8b5cf6" stroke-width=".8" transform="rotate(15 12 12)" fill="none" opacity=".6"/>
+    </svg>
     Órbita<span style="color:#6d28d9">.</span>Digital
   </a>
-  <ul class="nav-links">
+  <ul class="tnav-links">
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#processo">Processo</a></li>
     <li><a href="#precos">Preços</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
-  <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="nav-cta">Orçamento grátis</a>
-</nav>
+  <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="tnav-btn">Orçamento grátis</a>
+</header>
 
-<!-- JOURNEY SCROLL -->
+<!-- ── JOURNEY ── -->
 <div id="journey">
   <div id="sticky">
 
-    <div class="noise-line"></div>
-
-    <!-- Pontos de progresso -->
-    <div id="scene-dots">
-      <div class="scene-dot active"></div>
-      <div class="scene-dot"></div>
-      <div class="scene-dot"></div>
-      <div class="scene-dot"></div>
-      <div class="scene-dot"></div>
+    <!-- Dots laterais -->
+    <div id="dots">
+      <div class="dot on"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
 
-    <!-- Hint scroll -->
-    <div id="scroll-hint">
-      <div class="scroll-line"></div>
-      <span class="scroll-text">scroll</span>
+    <!-- Hint -->
+    <div id="hint">
+      <div class="hint-line"></div>
+      <span class="hint-txt">scroll</span>
     </div>
 
-    <!-- CENA 0: HERO -->
-    <div class="scene active" id="s0">
-      <div class="scene-world">
+    <!-- CENA 0: HERO ESPACIAL -->
+    <div class="sc on" id="sc0">
+      <div class="sc-world">
         <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="rg0a" cx="55%" cy="42%"><stop offset="0%" stop-color="#2d1a6e" stop-opacity=".9"/><stop offset="60%" stop-color="#0a0520" stop-opacity=".8"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
-            <radialGradient id="rg0b" cx="55%" cy="42%" r="25%"><stop offset="0%" stop-color="#6d28d9" stop-opacity=".35"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient>
-            <filter id="glow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="softglow"><feGaussianBlur stdDeviation="20" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <radialGradient id="g0a" cx="58%" cy="44%"><stop offset="0%" stop-color="#2d1a6e" stop-opacity=".95"/><stop offset="65%" stop-color="#0a0520" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a"/></radialGradient>
+            <radialGradient id="g0b" cx="58%" cy="44%" r="22%"><stop offset="0%" stop-color="#6d28d9" stop-opacity=".4"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="blur20"><feGaussianBlur stdDeviation="20"/></filter>
           </defs>
-          <rect width="1400" height="900" fill="url(#rg0a)"/>
-          <rect width="1400" height="900" fill="url(#rg0b)"/>
+          <rect width="1400" height="900" fill="url(#g0a)"/>
+          <rect width="1400" height="900" fill="url(#g0b)"/>
+          <!-- Glow atrás do planeta -->
+          <circle cx="820" cy="400" r="250" fill="rgba(109,40,217,.12)" filter="url(#blur20)"/>
           <!-- Planeta -->
-          <circle cx="820" cy="400" r="220" fill="#0d0720" filter="url(#softglow)"/>
-          <circle cx="820" cy="400" r="218" fill="none" stroke="rgba(109,40,217,.25)" stroke-width="2"/>
-          <!-- Textura planeta -->
-          <ellipse cx="800" cy="380" rx="220" ry="90" fill="rgba(109,40,217,.05)" transform="rotate(-10 800 380)"/>
-          <ellipse cx="840" cy="420" rx="180" ry="60" fill="rgba(245,158,11,.04)" transform="rotate(5 840 420)"/>
+          <circle cx="820" cy="400" r="215" fill="#0d0820"/>
+          <circle cx="820" cy="400" r="215" fill="none" stroke="rgba(109,40,217,.3)" stroke-width="1.5"/>
+          <!-- Bandas do planeta -->
+          <ellipse cx="820" cy="370" rx="215" ry="55" fill="rgba(109,40,217,.04)" transform="rotate(-8 820 370)"/>
+          <ellipse cx="820" cy="430" rx="200" ry="40" fill="rgba(245,158,11,.03)" transform="rotate(5 820 430)"/>
           <!-- Anéis -->
-          <ellipse cx="820" cy="400" rx="340" ry="100" fill="none" stroke="rgba(109,40,217,.18)" stroke-width="2" transform="rotate(-18 820 400)" filter="url(#glow)"/>
-          <ellipse cx="820" cy="400" rx="290" ry="82" fill="none" stroke="rgba(245,158,11,.12)" stroke-width="1.5" transform="rotate(-18 820 400)"/>
-          <ellipse cx="820" cy="400" rx="380" ry="115" fill="none" stroke="rgba(109,40,217,.08)" stroke-width="1" transform="rotate(-18 820 400)"/>
-          <ellipse cx="820" cy="400" rx="420" ry="130" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="348" ry="102" fill="none" stroke="rgba(109,40,217,.22)" stroke-width="2" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="295" ry="84" fill="none" stroke="rgba(245,158,11,.14)" stroke-width="1.5" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="388" ry="116" fill="none" stroke="rgba(109,40,217,.09)" stroke-width="1" transform="rotate(-18 820 400)"/>
+          <ellipse cx="820" cy="400" rx="428" ry="130" fill="none" stroke="rgba(255,255,255,.035)" stroke-width="1" transform="rotate(-18 820 400)"/>
           <!-- Lua -->
-          <circle cx="1100" cy="300" r="28" fill="#140a30" stroke="rgba(139,92,246,.3)" stroke-width="1.5"/>
-          <circle cx="1105" cy="295" r="8" fill="rgba(109,40,217,.15)"/>
-          <!-- Satélite menor -->
-          <circle cx="560" cy="520" r="14" fill="#f59e0b" opacity=".5" filter="url(#glow)"/>
-          <!-- Estrelas grandes -->
-          <circle cx="200" cy="150" r="2" fill="#fff" opacity=".6"/>
-          <circle cx="1200" cy="200" r="2.5" fill="#fff" opacity=".5"/>
-          <circle cx="350" cy="700" r="1.5" fill="#8b5cf6" opacity=".7"/>
-          <circle cx="1100" cy="650" r="2" fill="#f59e0b" opacity=".5"/>
-          <circle cx="100" cy="400" r="1.5" fill="#fff" opacity=".4"/>
-          <circle cx="1300" cy="500" r="2" fill="#fff" opacity=".4"/>
-          <!-- Nebulosa sutil -->
-          <ellipse cx="300" cy="250" rx="200" ry="120" fill="rgba(109,40,217,.05)" transform="rotate(-20 300 250)"/>
-          <ellipse cx="1100" cy="600" rx="180" ry="100" fill="rgba(245,158,11,.03)" transform="rotate(15 1100 600)"/>
+          <circle cx="1095" cy="285" r="30" fill="#120830" stroke="rgba(139,92,246,.35)" stroke-width="1.5"/>
+          <circle cx="1085" cy="278" r="9" fill="rgba(109,40,217,.2)"/>
+          <!-- Satélite dourado -->
+          <circle cx="545" cy="530" r="13" fill="#f59e0b" opacity=".55" filter="url(#blur8)"/>
+          <!-- Nebulosa -->
+          <ellipse cx="280" cy="220" rx="220" ry="100" fill="rgba(109,40,217,.04)" transform="rotate(-25 280 220)"/>
+          <ellipse cx="1150" cy="650" rx="190" ry="90" fill="rgba(245,158,11,.03)" transform="rotate(18 1150 650)"/>
+          <!-- Estrelas destacadas -->
+          <circle cx="180" cy="140" r="2.2" fill="#fff" opacity=".65"/>
+          <circle cx="1240" cy="190" r="2.5" fill="#fff" opacity=".5"/>
+          <circle cx="340" cy="720" r="1.8" fill="#8b5cf6" opacity=".75"/>
+          <circle cx="1120" cy="680" r="2" fill="#f59e0b" opacity=".55"/>
+          <circle cx="90" cy="420" r="1.5" fill="#fff" opacity=".45"/>
+          <circle cx="1310" cy="480" r="2" fill="#fff" opacity=".4"/>
+          <circle cx="620" cy="120" r="1.5" fill="#fff" opacity=".5"/>
+          <circle cx="1050" cy="80" r="1.8" fill="#fff" opacity=".4"/>
         </svg>
       </div>
-      <div class="scene-overlay"></div>
-      <div class="scene-number">00</div>
-      <div class="scene-content">
-        <div class="scene-eyebrow">Agência digital para pequenos negócios</div>
-        <h1 class="scene-headline">
-          <span class="word">Sua</span>
-          <span class="word">empresa</span>
-          <span class="word">merece</span>
-          <span class="word">estar</span>
-          <span class="word" style="color:#f59e0b">no</span>
-          <span class="word" style="color:#f59e0b">digital</span>
-          <span class="word">de</span>
-          <span class="word">verdade</span>
+      <div class="sc-ov"></div>
+      <div class="sc-num">00</div>
+      <div class="sc-body">
+        <div class="sc-label">Órbita Digital — Agência digital para pequenos negócios</div>
+        <h1 class="sc-title">
+          <span class="w">Sua</span><span class="w">empresa</span><span class="w">merece</span><span class="w">estar</span>
+          <span class="w" style="color:var(--gold)">no</span><span class="w" style="color:var(--gold)">digital</span><span class="w">de</span><span class="w">verdade</span>
         </h1>
-        <p class="scene-sub">Sites, design, automação e vídeos curtos para negócios no Brasil e nos EUA. 100% online, sem reunião, sem complicação.</p>
-        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="scene-btn">💬 Orçamento grátis no WhatsApp</a>
+        <p class="sc-sub">Sites, design, automação e vídeos curtos para negócios no Brasil e nos EUA. 100% online, sem reunião, sem complicação.</p>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site." target="_blank" class="sc-btn">💬 Orçamento grátis no WhatsApp</a>
       </div>
     </div>
 
     <!-- CENA 1: SITES -->
-    <div class="scene" id="s1">
-      <div class="scene-world">
+    <div class="sc" id="sc1">
+      <div class="sc-world">
         <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="rg1" cx="25%" cy="50%"><stop offset="0%" stop-color="#0d2a5c" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
-          </defs>
-          <rect width="1400" height="900" fill="url(#rg1)"/>
-          <rect width="1400" height="900" fill="rgba(4,5,26,.3)"/>
-          <!-- Grid perspectiva animado -->
-          <g stroke="rgba(109,40,217,.07)" stroke-width="1">
-            <line x1="700" y1="900" x2="0" y2="300"/>
-            <line x1="700" y1="900" x2="175" y2="200"/>
-            <line x1="700" y1="900" x2="350" y2="140"/>
-            <line x1="700" y1="900" x2="525" y2="110"/>
-            <line x1="700" y1="900" x2="700" y2="100"/>
-            <line x1="700" y1="900" x2="875" y2="110"/>
-            <line x1="700" y1="900" x2="1050" y2="140"/>
-            <line x1="700" y1="900" x2="1225" y2="200"/>
+          <defs><radialGradient id="g1" cx="25%" cy="50%"><stop offset="0%" stop-color="#0d2a5c" stop-opacity=".95"/><stop offset="100%" stop-color="#04051a"/></radialGradient></defs>
+          <rect width="1400" height="900" fill="url(#g1)"/>
+          <g stroke="rgba(109,40,217,.06)" stroke-width="1">
+            <line x1="700" y1="900" x2="0" y2="300"/><line x1="700" y1="900" x2="200" y2="180"/>
+            <line x1="700" y1="900" x2="400" y2="120"/><line x1="700" y1="900" x2="600" y2="100"/>
+            <line x1="700" y1="900" x2="700" y2="90"/><line x1="700" y1="900" x2="900" y2="100"/>
+            <line x1="700" y1="900" x2="1100" y2="140"/><line x1="700" y1="900" x2="1250" y2="200"/>
             <line x1="700" y1="900" x2="1400" y2="300"/>
-            <line x1="0" y1="700" x2="1400" y2="700"/>
-            <line x1="0" y1="600" x2="1400" y2="600"/>
-            <line x1="0" y1="500" x2="1400" y2="500"/>
-            <line x1="0" y1="410" x2="1400" y2="410"/>
-            <line x1="0" y1="330" x2="1400" y2="330"/>
-            <line x1="0" y1="260" x2="1400" y2="260"/>
+            <line x1="0" y1="720" x2="1400" y2="720"/><line x1="0" y1="600" x2="1400" y2="600"/>
+            <line x1="0" y1="490" x2="1400" y2="490"/><line x1="0" y1="395" x2="1400" y2="395"/>
+            <line x1="0" y1="315" x2="1400" y2="315"/><line x1="0" y1="248" x2="1400" y2="248"/>
           </g>
-          <!-- Browser window -->
-          <rect x="550" y="80" width="640" height="420" rx="14" fill="rgba(8,10,30,.9)" stroke="rgba(109,40,217,.25)" stroke-width="1"/>
-          <rect x="550" y="80" width="640" height="44" rx="14" fill="rgba(109,40,217,.12)"/>
-          <rect x="550" y="108" width="640" height="16" fill="rgba(109,40,217,.08)"/>
-          <circle cx="576" cy="102" r="7" fill="rgba(239,68,68,.5)"/>
-          <circle cx="598" cy="102" r="7" fill="rgba(234,179,8,.5)"/>
-          <circle cx="620" cy="102" r="7" fill="rgba(34,197,94,.5)"/>
-          <!-- URL bar -->
-          <rect x="640" y="92" width="420" height="20" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-          <text x="652" y="107" font-family="monospace" font-size="11" fill="rgba(255,255,255,.35)">orbitadigital.com</text>
-          <!-- Hero do site interno -->
-          <rect x="560" y="135" width="620" height="180" rx="4" fill="rgba(109,40,217,.06)"/>
-          <text x="580" y="210" font-family="monospace" font-size="28" fill="rgba(240,244,255,.8)" font-weight="bold">Órbita Digital</text>
-          <text x="580" y="240" font-family="monospace" font-size="13" fill="rgba(240,244,255,.35)">Presença digital para pequenos negócios</text>
-          <rect x="580" y="262" width="130" height="34" rx="17" fill="rgba(109,40,217,.5)"/>
-          <!-- Cards do site -->
-          <rect x="560" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
-          <rect x="760" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
-          <rect x="960" y="330" width="190" height="100" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
-          <!-- Footer site -->
-          <rect x="560" y="440" width="620" height="50" rx="4" fill="rgba(0,0,0,.2)"/>
-          <!-- Seta glow -->
-          <circle cx="550" cy="300" r="40" fill="rgba(109,40,217,.08)"/>
-          <text x="535" y="307" font-size="24" fill="rgba(109,40,217,.4)">↗</text>
+          <rect x="560" y="90" width="620" height="400" rx="14" fill="rgba(8,10,32,.92)" stroke="rgba(109,40,217,.22)" stroke-width="1"/>
+          <rect x="560" y="90" width="620" height="42" rx="14" fill="rgba(109,40,217,.1)"/>
+          <rect x="560" y="120" width="620" height="12" fill="rgba(109,40,217,.06)"/>
+          <circle cx="584" cy="111" r="6.5" fill="rgba(239,68,68,.45)"/>
+          <circle cx="604" cy="111" r="6.5" fill="rgba(234,179,8,.45)"/>
+          <circle cx="624" cy="111" r="6.5" fill="rgba(34,197,94,.45)"/>
+          <rect x="648" y="101" width="400" height="20" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <text x="660" y="115" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">orbitadigital.com</text>
+          <rect x="570" y="145" width="600" height="160" rx="4" fill="rgba(109,40,217,.05)"/>
+          <text x="590" y="222" font-family="'Space Grotesk',sans-serif" font-size="26" fill="rgba(240,244,255,.8)" font-weight="700">Órbita Digital</text>
+          <text x="590" y="252" font-family="monospace" font-size="12" fill="rgba(240,244,255,.3)">Presença digital para pequenos negócios</text>
+          <rect x="590" y="270" width="120" height="30" rx="15" fill="rgba(109,40,217,.5)"/>
+          <rect x="570" y="320" width="188" height="96" rx="8" fill="rgba(255,255,255,.025)" stroke="rgba(109,40,217,.1)" stroke-width="1"/>
+          <rect x="766" y="320" width="188" height="96" rx="8" fill="rgba(255,255,255,.025)" stroke="rgba(109,40,217,.1)" stroke-width="1"/>
+          <rect x="962" y="320" width="188" height="96" rx="8" fill="rgba(255,255,255,.025)" stroke="rgba(109,40,217,.1)" stroke-width="1"/>
+          <rect x="570" y="430" width="600" height="50" rx="4" fill="rgba(0,0,0,.15)"/>
         </svg>
       </div>
-      <div class="scene-overlay"></div>
-      <div class="scene-number">01</div>
-      <div class="scene-content">
-        <div class="scene-eyebrow">01 — Sites profissionais</div>
-        <h2 class="scene-headline">
-          <span class="word">Seu</span>
-          <span class="word">negócio</span>
-          <span class="word">na</span>
-          <span class="word">internet</span>
-          <span class="word">em</span>
-          <span class="word" style="color:#f59e0b">5 dias</span>
-        </h2>
-        <p class="scene-sub">Rápido, responsivo e otimizado para o Google. Do design à publicação — sem você precisar entender de tecnologia.</p>
-        <a href="#servicos" class="scene-btn">Ver serviços →</a>
+      <div class="sc-ov"></div>
+      <div class="sc-num">01</div>
+      <div class="sc-body">
+        <div class="sc-label">01 — Sites profissionais</div>
+        <h2 class="sc-title"><span class="w">Seu</span><span class="w">negócio</span><span class="w">na</span><span class="w">internet</span><span class="w">em</span><span class="w" style="color:var(--gold)">5 dias</span></h2>
+        <p class="sc-sub">Rápido, responsivo e otimizado para o Google. Do design à publicação, sem você precisar entender de tecnologia.</p>
+        <a href="#servicos" class="sc-btn">Ver serviços →</a>
       </div>
     </div>
 
     <!-- CENA 2: DESIGN -->
-    <div class="scene" id="s2">
-      <div class="scene-world">
+    <div class="sc" id="sc2">
+      <div class="sc-world">
         <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="rg2" cx="75%" cy="35%"><stop offset="0%" stop-color="#3b0d6e" stop-opacity=".8"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
-          </defs>
-          <rect width="1400" height="900" fill="url(#rg2)"/>
-          <!-- Formas geométricas flutuando -->
-          <rect x="700" y="80" width="480" height="600" rx="24" fill="rgba(10,6,26,.85)" stroke="rgba(139,92,246,.15)" stroke-width="1" transform="rotate(3 940 380)"/>
-          <!-- Swatches de cor -->
-          <rect x="730" y="110" width="420" height="160" rx="16" fill="rgba(109,40,217,.12)" stroke="rgba(109,40,217,.2)" stroke-width="1"/>
-          <text x="750" y="180" font-family="'Space Grotesk',sans-serif" font-size="32" fill="#f0f4ff" font-weight="700">Órbita</text>
-          <text x="750" y="222" font-family="'Space Grotesk',sans-serif" font-size="32" fill="#8b5cf6" font-weight="700">Digital</text>
-          <!-- Paleta -->
-          <rect x="730" y="290" width="80" height="80" rx="12" fill="#6d28d9"/>
-          <rect x="820" y="290" width="80" height="80" rx="12" fill="#8b5cf6"/>
-          <rect x="910" y="290" width="80" height="80" rx="12" fill="#f59e0b"/>
-          <rect x="1000" y="290" width="80" height="80" rx="12" fill="#04051a" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-          <rect x="1090" y="290" width="56" height="80" rx="12" fill="rgba(240,244,255,.06)"/>
-          <!-- Typography -->
-          <text x="730" y="420" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)" letter-spacing="4">SPACE GROTESK / SPACE MONO</text>
-          <rect x="730" y="435" width="420" height="1" fill="rgba(255,255,255,.05)"/>
-          <text x="730" y="475" font-family="'Space Grotesk',sans-serif" font-size="42" fill="rgba(240,244,255,.7)" font-weight="700">Aa Bb Cc</text>
-          <text x="730" y="510" font-family="monospace" font-size="20" fill="rgba(139,92,246,.6)">01 02 03 04</text>
-          <!-- Logo mark -->
-          <circle cx="320" cy="380" r="120" fill="rgba(109,40,217,.06)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
-          <circle cx="320" cy="380" r="40" fill="rgba(109,40,217,.2)"/>
-          <ellipse cx="320" cy="380" rx="100" ry="35" fill="none" stroke="rgba(245,158,11,.3)" stroke-width="2" transform="rotate(-20 320 380)"/>
+          <defs><radialGradient id="g2" cx="72%" cy="35%"><stop offset="0%" stop-color="#3b0d6e" stop-opacity=".85"/><stop offset="100%" stop-color="#04051a"/></radialGradient></defs>
+          <rect width="1400" height="900" fill="url(#g2)"/>
+          <rect x="720" y="90" width="400" height="560" rx="20" fill="rgba(10,6,28,.9)" stroke="rgba(139,92,246,.14)" stroke-width="1" transform="rotate(2 920 370)"/>
+          <rect x="740" y="118" width="360" height="150" rx="14" fill="rgba(109,40,217,.1)" stroke="rgba(109,40,217,.18)" stroke-width="1" transform="rotate(2 920 370)"/>
+          <text x="758" y="188" font-family="'Space Grotesk',sans-serif" font-size="30" fill="rgba(240,244,255,.85)" font-weight="700" transform="rotate(2 920 370)">Órbita</text>
+          <text x="758" y="228" font-family="'Space Grotesk',sans-serif" font-size="30" fill="rgba(139,92,246,.9)" font-weight="700" transform="rotate(2 920 370)">Digital</text>
+          <rect x="740" y="288" width="72" height="72" rx="12" fill="#6d28d9" transform="rotate(2 920 370)"/>
+          <rect x="822" y="288" width="72" height="72" rx="12" fill="#8b5cf6" transform="rotate(2 920 370)"/>
+          <rect x="904" y="288" width="72" height="72" rx="12" fill="#f59e0b" transform="rotate(2 920 370)"/>
+          <rect x="986" y="288" width="72" height="72" rx="12" fill="#04051a" stroke="rgba(255,255,255,.08)" stroke-width="1" transform="rotate(2 920 370)"/>
+          <rect x="740" y="382" width="360" height="8" rx="4" fill="rgba(255,255,255,.06)" transform="rotate(2 920 370)"/>
+          <rect x="740" y="402" width="260" height="8" rx="4" fill="rgba(255,255,255,.06)" transform="rotate(2 920 370)"/>
+          <text x="740" y="452" font-family="monospace" font-size="10" fill="rgba(255,255,255,.2)" letter-spacing="4" transform="rotate(2 920 370)">SPACE GROTESK · SPACE MONO</text>
+          <text x="740" y="492" font-family="'Space Grotesk',sans-serif" font-size="38" fill="rgba(240,244,255,.6)" font-weight="700" transform="rotate(2 920 370)">Aa Bb</text>
+          <rect x="740" y="530" width="150" height="34" rx="17" fill="rgba(109,40,217,.45)" transform="rotate(2 920 370)"/>
+          <!-- Logo circular -->
+          <circle cx="300" cy="400" r="115" fill="rgba(109,40,217,.05)" stroke="rgba(109,40,217,.12)" stroke-width="1"/>
+          <circle cx="300" cy="400" r="38" fill="rgba(109,40,217,.22)"/>
+          <ellipse cx="300" cy="400" rx="100" ry="34" fill="none" stroke="rgba(245,158,11,.32)" stroke-width="2" transform="rotate(-22 300 400)"/>
+          <ellipse cx="300" cy="400" rx="82" ry="26" fill="none" stroke="rgba(109,40,217,.2)" stroke-width="1.5" transform="rotate(12 300 400)"/>
         </svg>
       </div>
-      <div class="scene-overlay"></div>
-      <div class="scene-number">02</div>
-      <div class="scene-content">
-        <div class="scene-eyebrow">02 — Design gráfico</div>
-        <h2 class="scene-headline">
-          <span class="word">Identidade</span>
-          <span class="word">visual</span>
-          <span class="word">que</span>
-          <span class="word" style="color:#f59e0b">vende</span>
-        </h2>
-        <p class="scene-sub">Logos, posts para Instagram, cardápios digitais e banners. Sua marca consistente em todos os canais.</p>
-        <a href="#servicos" class="scene-btn">Quero um design →</a>
+      <div class="sc-ov"></div>
+      <div class="sc-num">02</div>
+      <div class="sc-body">
+        <div class="sc-label">02 — Design gráfico</div>
+        <h2 class="sc-title"><span class="w">Identidade</span><span class="w">visual</span><span class="w">que</span><span class="w" style="color:var(--gold)">vende</span></h2>
+        <p class="sc-sub">Logos, posts para Instagram, cardápios e banners. Sua marca consistente e profissional em todos os canais.</p>
+        <a href="#servicos" class="sc-btn">Quero um design →</a>
       </div>
     </div>
 
     <!-- CENA 3: AUTOMAÇÃO -->
-    <div class="scene" id="s3">
-      <div class="scene-world">
+    <div class="sc" id="sc3">
+      <div class="sc-world">
         <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="rg3" cx="45%" cy="55%"><stop offset="0%" stop-color="#052e1c" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
-          </defs>
-          <rect width="1400" height="900" fill="url(#rg3)"/>
-          <!-- Terminal/código -->
-          <rect x="100" y="100" width="560" height="480" rx="16" fill="rgba(4,8,20,.95)" stroke="rgba(5,150,105,.12)" stroke-width="1"/>
-          <rect x="100" y="100" width="560" height="42" rx="16" fill="rgba(5,150,105,.08)"/>
-          <rect x="100" y="126" width="560" height="16" fill="rgba(5,150,105,.04)"/>
-          <circle cx="126" cy="121" r="6" fill="rgba(239,68,68,.4)"/>
-          <circle cx="146" cy="121" r="6" fill="rgba(234,179,8,.4)"/>
-          <circle cx="166" cy="121" r="6" fill="rgba(34,197,94,.4)"/>
-          <!-- Linhas de código -->
-          <text x="120" y="170" font-family="monospace" font-size="13" fill="rgba(5,150,105,.8)">$ orbit --auto-post instagram</text>
-          <text x="120" y="195" font-family="monospace" font-size="13" fill="rgba(255,255,255,.3)">→ Agendando 12 posts...</text>
-          <text x="120" y="220" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post seg 09:00 agendado</text>
-          <text x="120" y="245" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post ter 11:00 agendado</text>
-          <text x="120" y="270" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ Post qua 19:00 agendado</text>
-          <text x="120" y="295" font-family="monospace" font-size="13" fill="rgba(255,255,255,.2)">...</text>
-          <text x="120" y="330" font-family="monospace" font-size="13" fill="rgba(139,92,246,.8)">$ orbit --bot whatsapp start</text>
-          <text x="120" y="355" font-family="monospace" font-size="13" fill="rgba(255,255,255,.3)">→ Bot ativo 24/7</text>
-          <text x="120" y="380" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ 47 mensagens respondidas</text>
-          <text x="120" y="405" font-family="monospace" font-size="13" fill="rgba(5,150,105,.6)">✓ 12 leads capturados hoje</text>
-          <text x="120" y="440" font-family="monospace" font-size="13" fill="rgba(139,92,246,.8)">$ orbit --report generate</text>
-          <text x="120" y="465" font-family="monospace" font-size="13" fill="rgba(245,158,11,.6)">📊 +340% alcance este mês</text>
-          <text x="120" y="500" font-family="monospace" font-size="13" fill="rgba(255,255,255,.5)">█</text>
-          <!-- Stats -->
-          <rect x="720" y="160" width="220" height="110" rx="14" fill="rgba(5,150,105,.06)" stroke="rgba(5,150,105,.15)" stroke-width="1"/>
-          <text x="740" y="210" font-family="monospace" font-size="38" fill="rgba(5,150,105,.9)" font-weight="bold">24/7</text>
-          <text x="740" y="242" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">BOT ATIVO</text>
-          <rect x="720" y="290" width="220" height="110" rx="14" fill="rgba(109,40,217,.06)" stroke="rgba(109,40,217,.15)" stroke-width="1"/>
-          <text x="740" y="340" font-family="monospace" font-size="38" fill="rgba(139,92,246,.9)" font-weight="bold">+3x</text>
-          <text x="740" y="372" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">MAIS ALCANCE</text>
-          <rect x="720" y="420" width="220" height="110" rx="14" fill="rgba(245,158,11,.06)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
-          <text x="740" y="470" font-family="monospace" font-size="38" fill="rgba(245,158,11,.9)" font-weight="bold">98%</text>
-          <text x="740" y="502" font-family="monospace" font-size="11" fill="rgba(255,255,255,.3)">RESPOSTAS AUTO</text>
+          <defs><radialGradient id="g3" cx="42%" cy="52%"><stop offset="0%" stop-color="#052e1c" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a"/></radialGradient></defs>
+          <rect width="1400" height="900" fill="url(#g3)"/>
+          <rect x="120" y="110" width="540" height="460" rx="16" fill="rgba(4,8,22,.96)" stroke="rgba(5,150,105,.1)" stroke-width="1"/>
+          <rect x="120" y="110" width="540" height="40" rx="16" fill="rgba(5,150,105,.07)"/>
+          <circle cx="146" cy="130" r="6" fill="rgba(239,68,68,.4)"/>
+          <circle cx="166" cy="130" r="6" fill="rgba(234,179,8,.4)"/>
+          <circle cx="186" cy="130" r="6" fill="rgba(34,197,94,.4)"/>
+          <text x="140" y="178" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.8)">$ orbit --auto-post instagram</text>
+          <text x="140" y="200" font-family="monospace" font-size="12.5" fill="rgba(255,255,255,.28)">→ Agendando 12 posts...</text>
+          <text x="140" y="225" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.65)">✓ Post seg 09:00 agendado</text>
+          <text x="140" y="248" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.65)">✓ Post qua 19:00 agendado</text>
+          <text x="140" y="271" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.65)">✓ Post sex 11:00 agendado</text>
+          <text x="140" y="310" font-family="monospace" font-size="12.5" fill="rgba(139,92,246,.85)">$ orbit --bot whatsapp start</text>
+          <text x="140" y="333" font-family="monospace" font-size="12.5" fill="rgba(255,255,255,.28)">→ Bot ativo 24/7</text>
+          <text x="140" y="358" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.65)">✓ 47 mensagens respondidas</text>
+          <text x="140" y="381" font-family="monospace" font-size="12.5" fill="rgba(5,150,105,.65)">✓ 12 leads capturados hoje</text>
+          <text x="140" y="420" font-family="monospace" font-size="12.5" fill="rgba(139,92,246,.85)">$ orbit --report generate</text>
+          <text x="140" y="445" font-family="monospace" font-size="12.5" fill="rgba(245,158,11,.7)">📊 +340% alcance este mês</text>
+          <text x="140" y="490" font-family="monospace" font-size="13" fill="rgba(255,255,255,.5)">█</text>
+          <rect x="720" y="160" width="210" height="105" rx="14" fill="rgba(5,150,105,.05)" stroke="rgba(5,150,105,.15)" stroke-width="1"/>
+          <text x="738" y="217" font-family="monospace" font-size="36" fill="rgba(5,150,105,.9)" font-weight="700">24/7</text>
+          <text x="738" y="244" font-family="monospace" font-size="10" fill="rgba(255,255,255,.25)">BOT ATIVO</text>
+          <rect x="720" y="285" width="210" height="105" rx="14" fill="rgba(109,40,217,.05)" stroke="rgba(109,40,217,.15)" stroke-width="1"/>
+          <text x="738" y="342" font-family="monospace" font-size="36" fill="rgba(139,92,246,.9)" font-weight="700">+3x</text>
+          <text x="738" y="368" font-family="monospace" font-size="10" fill="rgba(255,255,255,.25)">MAIS ALCANCE</text>
+          <rect x="720" y="410" width="210" height="105" rx="14" fill="rgba(245,158,11,.05)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+          <text x="738" y="467" font-family="monospace" font-size="36" fill="rgba(245,158,11,.9)" font-weight="700">98%</text>
+          <text x="738" y="493" font-family="monospace" font-size="10" fill="rgba(255,255,255,.25)">RESPOSTAS AUTO</text>
         </svg>
       </div>
-      <div class="scene-overlay"></div>
-      <div class="scene-number">03</div>
-      <div class="scene-content">
-        <div class="scene-eyebrow">03 — Automação e social media</div>
-        <h2 class="scene-headline">
-          <span class="word">Redes</span>
-          <span class="word">sociais</span>
-          <span class="word">no</span>
-          <span class="word" style="color:#f59e0b">piloto</span>
-          <span class="word" style="color:#f59e0b">automático</span>
-        </h2>
-        <p class="scene-sub">Posts agendados, bot de atendimento 24/7 no WhatsApp e Instagram. Você foca no negócio, a gente faz o resto.</p>
-        <a href="#servicos" class="scene-btn">Automatizar agora →</a>
+      <div class="sc-ov"></div>
+      <div class="sc-num">03</div>
+      <div class="sc-body">
+        <div class="sc-label">03 — Automação e social media</div>
+        <h2 class="sc-title"><span class="w">Redes</span><span class="w">sociais</span><span class="w">no</span><span class="w" style="color:var(--gold)">piloto</span><span class="w" style="color:var(--gold)">automático</span></h2>
+        <p class="sc-sub">Posts agendados, bot de atendimento 24/7 no WhatsApp e Instagram. Você foca no negócio, a gente faz o resto.</p>
+        <a href="#servicos" class="sc-btn">Automatizar agora →</a>
       </div>
     </div>
 
-    <!-- CENA 4: VÍDEOS / CTA -->
-    <div class="scene" id="s4">
-      <div class="scene-world">
+    <!-- CENA 4: VÍDEOS -->
+    <div class="sc" id="sc4">
+      <div class="sc-world">
         <svg style="width:115%;height:115%;position:absolute;top:-7%;left:-7%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="rg4" cx="50%" cy="45%"><stop offset="0%" stop-color="#3a1800" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a" stop-opacity="1"/></radialGradient>
-          </defs>
-          <rect width="1400" height="900" fill="url(#rg4)"/>
-          <rect width="1400" height="900" fill="rgba(4,5,26,.2)"/>
-          <!-- Phones com vídeos verticais -->
-          <rect x="230" y="80" width="210" height="380" rx="24" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
-          <rect x="238" y="110" width="194" height="340" rx="16" fill="rgba(109,40,217,.08)"/>
-          <polygon points="310,265 310,315 360,290" fill="rgba(245,158,11,.7)"/>
-          <rect x="238" y="460" width="194" height="14" rx="7" fill="rgba(255,255,255,.05)"/>
-          <rect x="238" y="478" width="130" height="14" rx="7" fill="rgba(255,255,255,.03)"/>
-
-          <rect x="480" y="40" width="230" height="415" rx="26" fill="rgba(10,6,18,.95)" stroke="rgba(109,40,217,.3)" stroke-width="2"/>
-          <rect x="489" y="72" width="212" height="370" rx="18" fill="rgba(109,40,217,.06)"/>
-          <polygon points="568,240 568,296 626,268" fill="rgba(139,92,246,.8)"/>
-          <text x="489" y="465" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">❤️ 12.4k  💬 847  ↗ 3.2k</text>
-
-          <rect x="760" y="80" width="210" height="380" rx="24" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
-          <rect x="768" y="110" width="194" height="340" rx="16" fill="rgba(245,158,11,.05)"/>
-          <polygon points="840,265 840,315 890,290" fill="rgba(245,158,11,.7)"/>
-
-          <!-- Métricas flutuantes -->
-          <rect x="1020" y="150" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
-          <text x="1040" y="192" font-family="monospace" font-size="26" fill="rgba(245,158,11,.9)" font-weight="bold">89K</text>
-          <text x="1090" y="192" font-family="monospace" font-size="12" fill="rgba(255,255,255,.3)"> views</text>
-          <rect x="1020" y="240" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(109,40,217,.15)" stroke-width="1"/>
-          <text x="1040" y="283" font-family="monospace" font-size="26" fill="rgba(139,92,246,.9)" font-weight="bold">+340%</text>
-          <text x="1040" y="302" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">alcance orgânico</text>
-          <rect x="1020" y="330" width="240" height="70" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(5,150,105,.15)" stroke-width="1"/>
-          <text x="1040" y="373" font-family="monospace" font-size="26" fill="rgba(5,150,105,.9)" font-weight="bold">4.8★</text>
-          <text x="1040" y="392" font-family="monospace" font-size="11" fill="rgba(255,255,255,.25)">satisfação clientes</text>
+          <defs><radialGradient id="g4" cx="50%" cy="45%"><stop offset="0%" stop-color="#3a1800" stop-opacity=".9"/><stop offset="100%" stop-color="#04051a"/></radialGradient></defs>
+          <rect width="1400" height="900" fill="url(#g4)"/>
+          <rect x="250" y="95" width="195" height="360" rx="22" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
+          <rect x="258" y="122" width="179" height="320" rx="14" fill="rgba(109,40,217,.07)"/>
+          <polygon points="325,262 325,308 372,285" fill="rgba(245,158,11,.65)"/>
+          <rect x="488" y="55" width="215" height="400" rx="24" fill="rgba(10,6,18,.95)" stroke="rgba(109,40,217,.3)" stroke-width="2"/>
+          <rect x="497" y="83" width="197" height="360" rx="16" fill="rgba(109,40,217,.06)"/>
+          <polygon points="567,253 567,305 622,279" fill="rgba(139,92,246,.75)"/>
+          <text x="497" y="462" font-family="monospace" font-size="10.5" fill="rgba(255,255,255,.22)">❤️ 12.4k  💬 847  ↗ 3.2k</text>
+          <rect x="750" y="95" width="195" height="360" rx="22" fill="rgba(10,6,18,.9)" stroke="rgba(245,158,11,.2)" stroke-width="1.5"/>
+          <rect x="758" y="122" width="179" height="320" rx="14" fill="rgba(245,158,11,.05)"/>
+          <polygon points="825,262 825,308 872,285" fill="rgba(245,158,11,.65)"/>
+          <rect x="1010" y="155" width="235" height="66" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(245,158,11,.14)" stroke-width="1"/>
+          <text x="1028" y="196" font-family="monospace" font-size="24" fill="rgba(245,158,11,.9)" font-weight="700">89K <tspan font-size="12" fill="rgba(255,255,255,.3)">views</tspan></text>
+          <rect x="1010" y="242" width="235" height="66" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(109,40,217,.14)" stroke-width="1"/>
+          <text x="1028" y="283" font-family="monospace" font-size="24" fill="rgba(139,92,246,.9)" font-weight="700">+340%</text>
+          <text x="1028" y="300" font-family="monospace" font-size="10" fill="rgba(255,255,255,.22)">alcance orgânico</text>
+          <rect x="1010" y="329" width="235" height="66" rx="12" fill="rgba(10,6,18,.8)" stroke="rgba(5,150,105,.14)" stroke-width="1"/>
+          <text x="1028" y="370" font-family="monospace" font-size="24" fill="rgba(5,150,105,.9)" font-weight="700">4.8★</text>
+          <text x="1028" y="387" font-family="monospace" font-size="10" fill="rgba(255,255,255,.22)">satisfação</text>
         </svg>
       </div>
-      <div class="scene-overlay"></div>
-      <div class="scene-number">04</div>
-      <div class="scene-content" style="text-align:center;left:50%;transform:translateX(-50%);bottom:12%;width:90%;max-width:760px">
-        <div class="scene-eyebrow" style="justify-content:center">04 — Vídeos curtos</div>
-        <h2 class="scene-headline" style="max-width:100%;text-align:center">
-          <span class="word">Reels</span>
-          <span class="word">e</span>
-          <span class="word">TikTok</span>
-          <span class="word">que</span>
-          <span class="word" style="color:#f59e0b">engajam</span>
-        </h2>
-        <p class="scene-sub" style="max-width:520px;margin:0 auto 2rem;text-align:center">Você grava, a gente edita e posta. Cortes dinâmicos, legendas animadas e trilha sonora inclusos.</p>
-        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Quero%20come%C3%A7ar." target="_blank" class="scene-btn" style="margin:0 auto">🚀 Começar agora</a>
+      <div class="sc-ov"></div>
+      <div class="sc-num">04</div>
+      <div class="sc-body" style="text-align:center;left:50%;transform:translateX(-50%);bottom:11%;width:90%;max-width:720px">
+        <div class="sc-label" style="justify-content:center">04 — Vídeos curtos</div>
+        <h2 class="sc-title" style="max-width:100%;text-align:center"><span class="w">Reels</span><span class="w">e</span><span class="w">TikTok</span><span class="w">que</span><span class="w" style="color:var(--gold)">engajam</span></h2>
+        <p class="sc-sub" style="max-width:480px;margin:0 auto 1.8rem;text-align:center">Você grava, a gente edita e posta. Cortes dinâmicos, legendas animadas e trilha sonora inclusos.</p>
+        <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Quero%20come%C3%A7ar." target="_blank" class="sc-btn" style="margin:0 auto">🚀 Começar agora</a>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- SEÇÕES -->
+<!-- ── SEÇÕES ── -->
+
 <section id="servicos" class="sec">
   <div class="sec-inner">
-    <div class="reveal">
-      <div class="sec-label">O que fazemos</div>
-      <h2 class="sec-h">Tudo que seu negócio precisa,<br><em>em um lugar só</em></h2>
-      <div class="sep"></div>
-    </div>
-    <div class="srv-grid reveal delay-1">
-      <div class="srv"><div class="srv-num">01</div><span class="srv-icon">🌐</span><h3>Site profissional</h3><p>Rápido, responsivo e otimizado para o Google. Ideal para quem ainda não está online ou quer modernizar o site antigo.</p></div>
-      <div class="srv"><div class="srv-num">02</div><span class="srv-icon">🎨</span><h3>Design gráfico</h3><p>Posts para Instagram, logos, cardápios digitais e banners com identidade visual consistente para o seu negócio.</p></div>
-      <div class="srv"><div class="srv-num">03</div><span class="srv-icon">🤖</span><h3>Automação e social media</h3><p>Gestão de redes sociais e bots de atendimento no WhatsApp e Instagram para responder clientes automaticamente.</p></div>
-      <div class="srv"><div class="srv-num">04</div><span class="srv-icon">🎬</span><h3>Edição de vídeos curtos</h3><p>Reels, TikTok e Shorts — o formato que mais gera alcance orgânico para pequenos negócios hoje.</p></div>
+    <div class="rv"><div class="slabel">O que fazemos</div></div>
+    <div class="rv d1"><h2 class="sh">Tudo que seu negócio precisa,<br><em>em um lugar só</em></h2><div class="sdiv"></div></div>
+    <div class="srvgrid rv d2">
+      <div class="srv"><div class="srv-n">01</div><span class="srv-i">🌐</span><h3>Site profissional</h3><p>Rápido, responsivo e otimizado para o Google. Ideal para quem ainda não está online ou quer modernizar.</p></div>
+      <div class="srv"><div class="srv-n">02</div><span class="srv-i">🎨</span><h3>Design gráfico</h3><p>Posts para Instagram, logos, cardápios digitais e banners com identidade visual consistente.</p></div>
+      <div class="srv"><div class="srv-n">03</div><span class="srv-i">🤖</span><h3>Automação e social media</h3><p>Gestão de redes sociais e bots de atendimento no WhatsApp e Instagram 24/7.</p></div>
+      <div class="srv"><div class="srv-n">04</div><span class="srv-i">🎬</span><h3>Vídeos curtos</h3><p>Reels, TikTok e Shorts — o formato que mais gera alcance orgânico para pequenos negócios hoje.</p></div>
     </div>
   </div>
 </section>
 
-<section id="processo" class="sec sec-dark">
+<section id="processo" class="sec sec-alt">
   <div class="sec-inner">
-    <div class="reveal">
-      <div class="sec-label">Como funciona</div>
-      <h2 class="sec-h">Do primeiro contato<br>ao <em>resultado</em></h2>
-      <div class="sep"></div>
-    </div>
-    <div class="proc-grid">
-      <div class="reveal delay-1"><div class="proc-n">01</div><h3>Você conta o que precisa</h3><p>Manda uma mensagem pelo WhatsApp ou formulário. Sem reunião, sem papelada.</p></div>
-      <div class="reveal delay-2"><div class="proc-n">02</div><h3>Recebe o orçamento</h3><p>Em até 24h você recebe uma proposta clara com prazo e valor.</p></div>
-      <div class="reveal delay-3"><div class="proc-n">03</div><h3>A gente executa</h3><p>Trabalhamos enquanto você foca no negócio. Atualizações pelo WhatsApp.</p></div>
-      <div class="reveal delay-4"><div class="proc-n">04</div><h3>Você aprova e vai ao ar</h3><p>Revisões incluídas. Entregamos só quando você estiver satisfeito.</p></div>
+    <div class="rv"><div class="slabel">Como funciona</div><h2 class="sh">Do primeiro contato<br>ao <em>resultado</em></h2><div class="sdiv"></div></div>
+    <div class="procgrid">
+      <div class="proc rv d1"><div class="proc-n">01</div><h3>Você conta o que precisa</h3><p>Manda uma mensagem pelo WhatsApp ou formulário. Sem reunião, sem papelada.</p></div>
+      <div class="proc rv d2"><div class="proc-n">02</div><h3>Recebe o orçamento</h3><p>Em até 24h você recebe uma proposta clara com prazo e valor.</p></div>
+      <div class="proc rv d3"><div class="proc-n">03</div><h3>A gente executa</h3><p>Trabalhamos enquanto você foca no negócio. Atualizações pelo WhatsApp.</p></div>
+      <div class="proc rv d4"><div class="proc-n">04</div><h3>Você aprova e vai ao ar</h3><p>Revisões incluídas. Entregamos só quando você estiver satisfeito.</p></div>
     </div>
   </div>
 </section>
 
 <section id="precos" class="sec">
   <div class="sec-inner">
-    <div class="reveal">
-      <div class="sec-label">Preços</div>
-      <h2 class="sec-h">Planos para cada<br><em>tamanho de negócio</em></h2>
-      <p class="sec-sub">Preços em BRL para o Brasil. Clientes nos EUA recebem proposta em USD.</p>
-    </div>
-    <div class="price-grid">
-      <div class="price-card reveal delay-1">
-        <div class="p-name">Presença</div>
-        <div class="p-val">R$ 497<span> / único</span></div>
-        <div class="p-desc">Para quem precisa aparecer online o quanto antes.</div>
-        <ul class="p-list"><li>Site de 1 página (landing page)</li><li>Formulário de contato</li><li>Otimizado para Google</li><li>Entrega em até 5 dias</li></ul>
-        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Presen%C3%A7a.','_blank')">Quero esse plano →</button>
+    <div class="rv"><div class="slabel">Preços</div><h2 class="sh">Planos para cada<br><em>tamanho de negócio</em></h2></div>
+    <p class="ssub rv d1">Preços em BRL para o Brasil. Clientes nos EUA recebem proposta em USD.</p>
+    <div class="pgrid">
+      <div class="pc rv d1">
+        <div class="pc-name">Presença</div>
+        <div class="pc-val">R$ 497<span> / único</span></div>
+        <div class="pc-desc">Para quem precisa aparecer online o quanto antes.</div>
+        <ul class="pc-list"><li>Site de 1 página (landing page)</li><li>Formulário de contato</li><li>Otimizado para Google</li><li>Entrega em até 5 dias</li></ul>
+        <button class="pbtn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Presen%C3%A7a.','_blank')">Quero esse plano →</button>
       </div>
-      <div class="price-card feat reveal delay-2">
+      <div class="pc feat rv d2">
         <div class="feat-tag">★ Mais popular</div>
-        <div class="p-name">Crescimento</div>
-        <div class="p-val">R$ 997<span> / mês</span></div>
-        <div class="p-desc">Site + gestão de redes sociais todo mês.</div>
-        <ul class="p-list"><li>Site completo com várias páginas</li><li>12 posts/mês para Instagram</li><li>Agendamento automático</li><li>Relatório mensal de desempenho</li><li>Suporte via WhatsApp</li></ul>
-        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Crescimento.','_blank')">Quero esse plano →</button>
+        <div class="pc-name">Crescimento</div>
+        <div class="pc-val">R$ 997<span> / mês</span></div>
+        <div class="pc-desc">Site + gestão de redes sociais todo mês.</div>
+        <ul class="pc-list"><li>Site completo com várias páginas</li><li>12 posts/mês para Instagram</li><li>Agendamento automático</li><li>Relatório mensal</li><li>Suporte via WhatsApp</li></ul>
+        <button class="pbtn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Crescimento.','_blank')">Quero esse plano →</button>
       </div>
-      <div class="price-card reveal delay-3">
-        <div class="p-name">Autoridade</div>
-        <div class="p-val">R$ 1.997<span> / mês</span></div>
-        <div class="p-desc">Solução completa para dominar o digital.</div>
-        <ul class="p-list"><li>Tudo do plano Crescimento</li><li>4 vídeos curtos editados/mês</li><li>Bot de atendimento WhatsApp</li><li>Design gráfico ilimitado</li><li>Prioridade no suporte</li></ul>
-        <button class="p-btn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Autoridade.','_blank')">Quero esse plano →</button>
+      <div class="pc rv d3">
+        <div class="pc-name">Autoridade</div>
+        <div class="pc-val">R$ 1.997<span> / mês</span></div>
+        <div class="pc-desc">Solução completa para dominar o digital.</div>
+        <ul class="pc-list"><li>Tudo do plano Crescimento</li><li>4 vídeos curtos editados/mês</li><li>Bot de atendimento WhatsApp</li><li>Design gráfico ilimitado</li><li>Prioridade no suporte</li></ul>
+        <button class="pbtn" onclick="window.open('https://wa.me/5551989006644?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Autoridade.','_blank')">Quero esse plano →</button>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec sec-dark">
+<section class="sec sec-alt">
   <div class="sec-inner">
-    <div class="reveal">
-      <div class="sec-label">Dúvidas</div>
-      <h2 class="sec-h">Perguntas <em>frequentes</em></h2>
-    </div>
-    <div class="faq-list">
-      <details class="reveal delay-1"><summary>Preciso ir a algum lugar para contratar?</summary><p>Não. 100% remoto — WhatsApp, email ou videochamada. Atendemos Brasil e EUA sem nenhuma reunião presencial.</p></details>
-      <details class="reveal delay-2"><summary>Como é feito o pagamento?</summary><p>Brasil: Pix ou cartão. EUA: Wise, PayPal ou cartão internacional.</p></details>
-      <details class="reveal delay-3"><summary>Quanto tempo leva para entregar?</summary><p>Site simples: até 5 dias após aprovação do conteúdo. Projetos maiores têm prazo combinado previamente.</p></details>
-      <details class="reveal delay-4"><summary>Posso contratar apenas um serviço?</summary><p>Sim! Cada serviço pode ser contratado separadamente ou combinado em um plano personalizado conforme sua necessidade.</p></details>
-      <details class="reveal"><summary>Vocês atendem qualquer tipo de negócio?</summary><p>Sim — restaurantes, clínicas, lojas, prestadores de serviço, profissionais liberais e muito mais.</p></details>
+    <div class="rv"><div class="slabel">Dúvidas</div><h2 class="sh">Perguntas <em>frequentes</em></h2></div>
+    <div class="faq">
+      <details class="rv d1"><summary>Preciso ir a algum lugar para contratar?</summary><p>Não. 100% remoto — WhatsApp, email ou videochamada. Atendemos Brasil e EUA sem nenhuma reunião presencial.</p></details>
+      <details class="rv d2"><summary>Como é feito o pagamento?</summary><p>Brasil: Pix ou cartão. EUA: Wise, PayPal ou cartão internacional.</p></details>
+      <details class="rv d3"><summary>Quanto tempo leva para entregar?</summary><p>Site simples: até 5 dias após aprovação do conteúdo. Projetos maiores têm prazo combinado.</p></details>
+      <details class="rv d4"><summary>Posso contratar apenas um serviço?</summary><p>Sim! Cada serviço pode ser contratado separadamente ou combinado em um plano personalizado.</p></details>
+      <details class="rv"><summary>Vocês atendem qualquer tipo de negócio?</summary><p>Sim — restaurantes, clínicas, lojas, prestadores de serviço, profissionais liberais e muito mais.</p></details>
     </div>
   </div>
 </section>
 
 <section id="contato" class="sec">
   <div class="sec-inner">
-    <div class="contact-grid">
+    <div class="cgrid">
       <div>
-        <div class="reveal">
-          <div class="sec-label">Contato</div>
-          <h2 class="sec-h">Vamos colocar seu negócio<br>no <em>digital</em>?</h2>
-          <div class="sep"></div>
-          <p style="color:rgba(240,244,255,.45);line-height:1.75;margin-bottom:2.5rem">Manda uma mensagem. Resposta em até 24h e orçamento sem compromisso.</p>
-        </div>
-        <div class="c-link reveal delay-1"><div class="c-icon">📱</div><span><strong>WhatsApp</strong><br><a href="https://wa.me/5551989006644" target="_blank">+55 (51) 9 8900-6644</a></span></div>
-        <div class="c-link reveal delay-2"><div class="c-icon">📧</div><span><strong>Email</strong><br><a href="mailto:orbit.digital.bussiness@gmail.com">orbit.digital.bussiness@gmail.com</a></span></div>
-        <div class="c-link reveal delay-3"><div class="c-icon">📸</div><span><strong>Instagram</strong><br><a href="https://instagram.com/orbit.digital.bussiness" target="_blank">@orbit.digital.bussiness</a></span></div>
-        <div class="c-link reveal delay-4"><div class="c-icon">📍</div><span><strong>Localização</strong><br>Canoas, RS — Brasil & EUA</span></div>
+        <div class="rv"><div class="slabel">Contato</div><h2 class="sh">Vamos colocar seu negócio<br>no <em>digital</em>?</h2><div class="sdiv"></div></div>
+        <p class="rv d1" style="color:var(--muted);line-height:1.75;margin-bottom:2.2rem">Manda uma mensagem. Resposta em até 24h e orçamento sem compromisso.</p>
+        <div class="clink rv d1"><div class="cicon">📱</div><span><strong>WhatsApp</strong><br><a href="https://wa.me/5551989006644" target="_blank">+55 (51) 9 8900-6644</a></span></div>
+        <div class="clink rv d2"><div class="cicon">📧</div><span><strong>Email</strong><br><a href="mailto:orbit.digital.bussiness@gmail.com">orbit.digital.bussiness@gmail.com</a></span></div>
+        <div class="clink rv d3"><div class="cicon">📸</div><span><strong>Instagram</strong><br><a href="https://instagram.com/orbit.digital.bussiness" target="_blank">@orbit.digital.bussiness</a></span></div>
+        <div class="clink rv d4"><div class="cicon">📍</div><span><strong>Localização</strong><br>Canoas, RS — Brasil &amp; EUA</span></div>
       </div>
-      <div class="reveal delay-2">
+      <div class="rv d2">
         <form class="cform" action="https://formsubmit.co/orbit.digital.bussiness@gmail.com" method="POST">
           <input type="hidden" name="_subject" value="🪐 Novo contato — Órbita Digital">
           <input type="hidden" name="_captcha" value="false">
@@ -933,9 +857,9 @@ footer{
             </select>
           </div>
           <div class="fg"><label>Mensagem</label><textarea name="mensagem" placeholder="Conta sobre o seu negócio e o que você precisa..."></textarea></div>
-          <button type="submit" class="f-submit">Enviar mensagem →</button>
-          <div class="f-or">ou</div>
-          <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20%C3%93rbita%20Digital." target="_blank" class="f-wa">💬 Falar direto no WhatsApp</a>
+          <button type="submit" class="fsubmit">Enviar mensagem →</button>
+          <div class="for">ou</div>
+          <a href="https://wa.me/5551989006644?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20%C3%93rbita%20Digital." target="_blank" class="fwa">💬 Falar direto no WhatsApp</a>
         </form>
       </div>
     </div>
@@ -943,131 +867,120 @@ footer{
 </section>
 
 <footer>
-  <div class="foot-inner">
-    <div class="foot-logo">🪐 Órbita Digital</div>
-    <nav class="foot-links">
+  <div class="finner">
+    <div class="flogo">🪐 Órbita Digital</div>
+    <div class="flinks">
       <a href="#servicos">Serviços</a>
       <a href="#processo">Processo</a>
       <a href="#precos">Preços</a>
       <a href="#contato">Contato</a>
       <a href="https://instagram.com/orbit.digital.bussiness" target="_blank">Instagram</a>
-    </nav>
-    <div class="foot-copy">© 2025 Órbita Digital. Todos os direitos reservados. Brasil & EUA.</div>
+    </div>
+    <div class="fcopy">© 2025 Órbita Digital. Todos os direitos reservados. Brasil &amp; EUA.</div>
   </div>
 </footer>
 
 <script>
 // ── CURSOR ──
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{
   mx=e.clientX;my=e.clientY;
   cur.style.left=mx+'px';cur.style.top=my+'px';
 });
-function animRing(){
-  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+(function tick(){
+  rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
   ring.style.left=rx+'px';ring.style.top=ry+'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
-document.querySelectorAll('a,button,summary,.srv,.price-card,.scene-dot').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a,button,summary,.srv,.pc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
 });
 
-// ── CANVAS PARTÍCULAS ──
-const canvas=document.getElementById('bg-canvas');
-const ctx=canvas.getContext('2d');
+// ── ESTRELAS ──
+const cnv=document.getElementById('bgc'),ctx=cnv.getContext('2d');
 let W,H,stars=[];
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
-function initStars(){
+function rsz(){W=cnv.width=innerWidth;H=cnv.height=innerHeight}
+function mkStars(){
   stars=[];
-  for(let i=0;i<180;i++){
-    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,o:Math.random()*.6+.1,s:Math.random()*.004+.001,vx:(Math.random()-.5)*.05,vy:(Math.random()-.5)*.05});
-  }
+  for(let i=0;i<160;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.3,o:Math.random()*.5+.1,s:Math.random()*.004+.001,vx:(Math.random()-.5)*.04,vy:(Math.random()-.5)*.04});
 }
-function drawStars(){
+function draw(){
   ctx.clearRect(0,0,W,H);
   stars.forEach(s=>{
-    s.o+=s.s*(Math.random()>.5?1:-1);
-    s.o=Math.max(.05,Math.min(.8,s.o));
+    s.o+=s.s*(Math.random()>.5?1:-1);s.o=Math.max(.05,Math.min(.75,s.o));
     s.x+=s.vx;s.y+=s.vy;
     if(s.x<0)s.x=W;if(s.x>W)s.x=0;
     if(s.y<0)s.y=H;if(s.y>H)s.y=0;
     ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
     ctx.fillStyle=`rgba(255,255,255,${s.o})`;ctx.fill();
   });
-  requestAnimationFrame(drawStars);
+  requestAnimationFrame(draw);
 }
-window.addEventListener('resize',()=>{resize();initStars()});
-resize();initStars();drawStars();
+window.addEventListener('resize',()=>{rsz();mkStars()});
+rsz();mkStars();draw();
 
-// ── NAV SCROLL ──
+// ── NAV SOLID ──
 window.addEventListener('scroll',()=>{
-  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
+  document.getElementById('topnav').classList.toggle('solid',scrollY>40);
 },{passive:true});
 
-// ── JOURNEY SCROLL ──
+// ── JOURNEY ──
 const journey=document.getElementById('journey');
-const scenes=document.querySelectorAll('.scene');
-const dots=document.querySelectorAll('.scene-dot');
-const hint=document.getElementById('scroll-hint');
-const prog=document.getElementById('progress');
+const scenes=[...document.querySelectorAll('.sc')];
+const dots=[...document.querySelectorAll('.dot')];
+const hint=document.getElementById('hint');
+const prog=document.getElementById('prog');
 const N=scenes.length;
-let currentScene=-1;
+let cur2=-1;
 
-// Stagger para palavras do headline
-function animWords(scene){
-  scene.querySelectorAll('.scene-headline .word').forEach((w,i)=>{
-    w.style.transitionDelay=`${.05+i*.07}s`;
+// Stagger palavras
+scenes.forEach(s=>{
+  s.querySelectorAll('.w').forEach((w,i)=>{
+    w.style.transitionDelay=`${.04+i*.065}s`;
   });
-}
-scenes.forEach(s=>animWords(s));
+});
 
-function updateJourney(){
+function upd(){
   const rect=journey.getBoundingClientRect();
-  const total=journey.offsetHeight-window.innerHeight;
+  const total=journey.offsetHeight-innerHeight;
   const scrolled=Math.max(0,-rect.top);
   const pct=Math.min(1,scrolled/total);
 
-  // Progresso global
-  const docH=document.documentElement.scrollHeight-window.innerHeight;
-  prog.style.width=(window.scrollY/docH*100)+'%';
+  // Barra progresso global
+  const dh=document.documentElement.scrollHeight-innerHeight;
+  prog.style.width=(scrollY/dh*100)+'%';
 
   const idx=Math.min(N-1,Math.floor(pct*N));
-  if(idx!==currentScene){
-    currentScene=idx;
-    scenes.forEach((s,i)=>{
-      const active=i===idx;
-      s.classList.toggle('active',active);
-    });
-    dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+  if(idx!==cur2){
+    cur2=idx;
+    scenes.forEach((s,i)=>s.classList.toggle('on',i===idx));
+    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
   }
 
-  // Parallax interno: move o world dentro da cena ativa
-  const sceneProgress=(pct*N)%1; // 0→1 dentro da cena atual
-  const activeScene=document.querySelector('.scene.active');
-  if(activeScene){
-    const world=activeScene.querySelector('.scene-world');
+  // Parallax dentro da cena
+  const sp=(pct*N)%1;
+  const active=document.querySelector('.sc.on');
+  if(active){
+    const world=active.querySelector('.sc-world');
     if(world){
-      const tx=(sceneProgress-.5)*30;
-      const ty=(sceneProgress-.5)*20;
-      world.style.transform=`translate(${tx}px,${ty}px) scale(1.05)`;
+      const tx=(sp-.5)*25;
+      const ty=(sp-.5)*15;
+      world.style.transform=`translate(${tx}px,${ty}px) scale(1.04)`;
     }
   }
 
-  hint.classList.toggle('hidden',scrolled>80);
+  hint.classList.toggle('gone',scrolled>60);
 }
+window.addEventListener('scroll',upd,{passive:true});
+upd();
 
-window.addEventListener('scroll',updateJourney,{passive:true});
-updateJourney();
-
-// ── REVEAL AO SCROLL ──
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');observer.unobserve(e.target);}});
+// ── REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
 // ── SMOOTH SCROLL ──
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
