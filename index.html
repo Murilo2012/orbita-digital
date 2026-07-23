@@ -10,6 +10,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:auto}
+body{padding-top:0}
 body{
   background:#04051a;color:#f0f4ff;
   font-family:'Space Grotesk',sans-serif;
@@ -21,6 +22,7 @@ body{
   position:fixed;width:12px;height:12px;
   background:#8b5cf6;border-radius:50%;
   pointer-events:none;z-index:9999;
+  will-change:transform;
   transform:translate(-50%,-50%);
   transition:width .2s,height .2s,background .2s;
   mix-blend-mode:screen;
@@ -29,6 +31,7 @@ body{
   position:fixed;width:40px;height:40px;
   border:1px solid rgba(139,92,246,.5);
   border-radius:50%;pointer-events:none;z-index:9998;
+  will-change:transform;
   transform:translate(-50%,-50%);
   transition:width .35s cubic-bezier(.22,1,.36,1),
              height .35s cubic-bezier(.22,1,.36,1),
@@ -48,7 +51,8 @@ body:hover #cursor{opacity:1}
 
 /* ── NAV ── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  pointer-events:all;
   padding:0 2rem;
   height:64px;
   display:flex;align-items:center;justify-content:space-between;
@@ -90,6 +94,8 @@ nav.scrolled{
   letter-spacing:.03em;transition:all .25s;
   box-shadow:0 0 16px rgba(109,40,217,.3);
   cursor:pointer;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:501;
+  pointer-events:all;
 }
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(109,40,217,.5)}
 @media(max-width:900px){
@@ -185,7 +191,7 @@ nav.scrolled{
 /* Indicador de progresso de cenas */
 #scene-dots{
   position:absolute;right:2.5rem;top:50%;
-  transform:translateY(-50%);z-index:20;
+  transform:translateY(-50%);z-index:10;
   display:flex;flex-direction:column;gap:.6rem;
 }
 .scene-dot{
@@ -430,6 +436,7 @@ footer{
 /* Fundo com partículas globais */
 #bg-canvas{
   position:fixed;inset:0;z-index:0;pointer-events:none;
+  top:0;
 }
 
 /* Linha de ruído animado horizontal */
